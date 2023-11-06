@@ -5,8 +5,8 @@ project(robot VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 
+add_subdirectory(amp-embedded-infra-lib)
 add_subdirectory(amp-hal-st)
-add_subdirectory(embedded_infra_lib)
 
 emil_folderize_all_targets()
 

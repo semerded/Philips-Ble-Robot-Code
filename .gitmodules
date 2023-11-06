@@ -1,6 +1,6 @@
 [submodule "amp-hal-st"]
 	path = amp-hal-st
-	url = https://github.com/philips-software/amp-hal-st
-[submodule "embedded_infra_lib"]
-	path = embedded_infra_lib
-	url = https://github.com/philips-software/amp-embedded-infra-lib
+	url = https://github.com/philips-software/amp-hal-st.git
+[submodule "amp-embedded-infra-lib"]
+	path = amp-embedded-infra-lib
+	url = https://github.com/philips-software/amp-embedded-infra-lib.git
