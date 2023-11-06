@@ -6,32 +6,17 @@
       "hidden": true,
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "HALST_BUILD_EXAMPLES": true
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "On"
       }
     },
     {
       "name": "host",
       "displayName": "Configuration for Host Tooling and Tests",
       "inherits": "defaults",
+      "generator": "Ninja Multi-Config",
       "cacheVariables": {
-        "CMAKE_CONFIGURATION_TYPES": "Debug;Release;RelWithDebInfo;MinSizeRel"
-      },
-      "generator": "Ninja Multi-Config"
-    },
-    {
-      "name": "host-single-Debug",
-      "displayName": "Configuration for Host Tooling and Tests, Single Config Generator, Debug",
-      "inherits": "defaults",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      }
-    },
-    {
-      "name": "host-single-MinSizeRel",
-      "displayName": "Configuration for Host Tooling and Tests, Single Config Generator, MinSizeRel",
-      "inherits": "defaults",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "MinSizeRel"
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release;RelWithDebInfo;MinSizeRel",
+        "EMIL_BUILD_TESTS": "On"
       }
     },
     {
@@ -44,6 +29,9 @@
       },
       "cacheVariables": {
         "EMIL_GENERATE_PACKAGE_CONFIG": false,
+        "TARGET_MCU_VENDOR": "st",
+        "ROBOT_BUILD_TESTS": "Off",
+        "TARGET_CORTEX": true,
         "TARGET_MCU_VENDOR": "st"
       }
     },
@@ -52,9 +40,8 @@
       "displayName": "stm32wb55",
       "description": "Build for stm32wb55",
       "inherits": "stm32",
-      "toolchainFile": "${sourceDir}/build/${presetName}/_deps/emil-src/cmake/toolchain-arm-gcc-m4-fpv4-sp-d16.cmake",
+      "toolchainFile": "${sourceDir}/amp-embedded-infra-lib/cmake/toolchain-arm-gcc-m4-fpv4-sp-d16.cmake",
       "cacheVariables": {
-        "TARGET_CORTEX": "m4",
         "TARGET_MCU_FAMILY": "stm32wbxx",
         "TARGET_MCU": "stm32wb55",
         "TARGET_MCU_VARIANT": "stm32wb55rg"
@@ -66,13 +53,10 @@
       "displayName": "stm32f767",
       "description": "Build for stm32f767",
       "inherits": "stm32",
-      "toolchainFile": "${sourceDir}/build/${presetName}/_deps/emil-src/cmake/toolchain-arm-gcc-m7-fpv5-d16.cmake",
+      "toolchainFile": "${sourceDir}/amp-embedded-infra-lib/cmake/toolchain-arm-gcc-m7-fpv5-d16.cmake",
       "cacheVariables": {
-        "TARGET_CORTEX": "m7",
         "TARGET_MCU_FAMILY": "stm32f7xx",
-        "TARGET_MCU": "stm32f767",
-        "HALST_BUILD_EXAMPLES_FREERTOS": true,
-        "FREERTOS_CONFIG_FILE_DIRECTORY": "${sourceDir}/examples/freertos/config"
+        "TARGET_MCU": "stm32f767"
       }
     }
   ],
@@ -87,7 +71,6 @@
       "configuration": "RelWithDebInfo",
       "configurePreset": "host"
     },
-  
     {
       "name": "stm32wb55-RelWithDebInfo",
       "configuration": "RelWithDebInfo",
@@ -112,8 +95,14 @@
       }
     },
     {
-      "name": "host",
-      "configurePreset": "host",
+      "name": "Host-RelWithDebInfo",
+      "configurePreset": "Host",
+      "configuration": "RelWithDebInfo",
+      "inherits": "defaults"
+    },
+    {
+      "name": "Host-Debug",
+      "configurePreset": "Host",
       "configuration": "Debug",
       "inherits": "defaults"
     }

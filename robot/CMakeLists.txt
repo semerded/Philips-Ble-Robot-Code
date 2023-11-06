@@ -1,17 +1,22 @@
-add_executable(hal_st.robot Main.cpp)
+if ("${TARGET_MCU}" STREQUAL stm32f767)
+    add_executable(hal_st.robot)
 
-emil_build_for(hal_st.blink_nucleo144 TARGET_MCU_VENDOR st PREREQUISITE_BOOL HALST_BUILD_EXAMPLES)
+    target_include_directories(hal_st.robot PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+    )
 
-target_compile_definitions(hal_st.blink_nucleo144 PUBLIC
-    NUCLEO=Nucleo144Ui
-)
+    target_sources(hal_st.robot PRIVATE
+        Main.cpp
+    )
 
-target_link_libraries(hal_st.blink_nucleo144 PRIVATE
-    services.util
-    hal_st.instantiations
-)
+    target_link_libraries(hal_st.robot PRIVATE
+        services.util
+        hal_st.instantiations
+    )
 
-halst_target_default_linker_scripts(hal_st.blink_nucleo144)
-halst_target_default_init(hal_st.blink_nucleo144)
+    halst_target_default_linker_scripts(hal_st.robot)
+    halst_target_default_init(hal_st.robot)
 
-emil_generate_artifacts(TARGET hal_st.blink_nucleo144 LST MAP BIN HEX)
+    emil_generate_artifacts(TARGET hal_st.robot LST MAP BIN HEX)
+endif()
