@@ -1,7 +1,7 @@
 {
  
     "name": "amp-devcontainer",
-    "image": "ghcr.io/philips-software/amp-devcontainer:2.5.0",
+    "image": "ghcr.io/philips-software/amp-devcontainer@sha256:a6e3e72d23ad998339495c2c4e921155cda3bdd3554f1350b55fe7501a1136e9", //v2.5.0
     "runArgs": ["--add-host=host.docker.internal:host-gateway"],
     "remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
     "mounts": [

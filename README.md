@@ -1,4 +1,4 @@
-Snuffelstage bij Philips Eindhoven van 6nov - 17nov 2023
+## Snuffelstage bij Philips Eindhoven van 6nov - 17nov 2023
 
 Behandelde onderdelen:
 - maken van een remote Git repository
