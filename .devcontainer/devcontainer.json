@@ -1,5 +1,5 @@
 {
- 
+
     "name": "amp-devcontainer",
     "image": "ghcr.io/philips-software/amp-devcontainer@sha256:a6e3e72d23ad998339495c2c4e921155cda3bdd3554f1350b55fe7501a1136e9", //v2.5.0
     "runArgs": ["--add-host=host.docker.internal:host-gateway"],
@@ -11,7 +11,6 @@
       "llvm-vs-code-extensions.vscode-clangd",
       "marus25.cortex-debug",
       "matepek.vscode-catch2-test-adapter",
-      "ms-vscode.cmake-tools",
-      "SonarSource.sonarlint-vscode"
+      "ms-vscode.cmake-tools"
     ]
   }
