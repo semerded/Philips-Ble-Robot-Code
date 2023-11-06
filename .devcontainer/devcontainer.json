@@ -1,23 +1,17 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/cpp
 {
-	"name": "C++",
-	"build": {
-		"dockerfile": "Dockerfile"
-	}
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "gcc -v",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
-}
+ 
+    "name": "amp-devcontainer",
+    "image": "ghcr.io/philips-software/amp-devcontainer:2.5.0",
+    "runArgs": ["--add-host=host.docker.internal:host-gateway"],
+    "remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
+    "mounts": [
+      "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "extensions": [
+      "llvm-vs-code-extensions.vscode-clangd",
+      "marus25.cortex-debug",
+      "matepek.vscode-catch2-test-adapter",
+      "ms-vscode.cmake-tools",
+      "SonarSource.sonarlint-vscode"
+    ]
+  }
