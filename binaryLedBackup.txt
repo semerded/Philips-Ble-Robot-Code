@@ -1,0 +1,125 @@
+#include "hal_st/instantiations/NucleoTracerInfrastructure.hpp"
+#include "hal_st/instantiations/NucleoUi.hpp"
+#include "hal_st/instantiations/StmEventInfrastructure.hpp"
+#include "hal_st/stm32fxxx/DefaultClockNucleoF767ZI.hpp"
+#include "hal_st/stm32fxxx/SystemTickStm.cpp"
+#include "infra/timer/Timer.hpp"
+#include "services/util/DebugLed.hpp"
+#include <array>
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+using namespace std;
+unsigned int hse_value = 8000000;
+
+uint8_t ledCyclus;
+
+string intToByteString(uint8_t& ledCyclus)
+{
+    string byteString = "";
+    for (int i = 7; i >= 0; i--)
+    {
+        int b = ledCyclus >> i;
+        if (b & 1)
+            byteString += "1";
+        else
+            byteString += "0";
+    };
+    return byteString;
+}
+
+int main()
+{
+    HAL_Init();
+
+    // Configure your clock here
+    ConfigureDefaultClockNucleo767ZI();
+
+    static main_::StmEventInfrastructure eventInfrastructure;
+    static main_::Nucleo144Ui ui;
+    // static services::DebugLed debugLed(ui.ledBlue);;
+    static hal::OutputPin ledRed(ui.ledRed);
+    static hal::OutputPin ledGreen(ui.ledGreen);
+    static hal::OutputPin ledBlue(ui.ledBlue);
+
+    // static hal::InputPin button(ui.buttonOne);
+
+    static main_::NucleoF767ziTracerInfrastructure tracer;
+
+    // tracer.tracer.Trace() << str;
+
+    static infra::TimerRepeating timer(std::chrono::seconds(1), []()
+        {
+
+            ledCyclus++;
+            if (ledCyclus == 8)
+            {
+                int blinkCounter = 0;
+                unsigned long currentTime;
+                unsigned long previousTime;
+                bool ledsOn = false;
+                while (true) {
+                    if (blinkCounter >= 10) {
+                        break;
+                    }
+                    currentTime = HAL_GetTick();
+                    if (currentTime - previousTime >= 50) {
+                        blinkCounter++;
+                        if (ledsOn) {
+                            ledRed.Set(false);
+                            ledGreen.Set(false);
+                            ledBlue.Set(false);
+                            ledsOn = false;
+                        } else {
+                            ledRed.Set(true);
+                            ledGreen.Set(true);
+                            ledBlue.Set(true);
+                            ledsOn = true;
+                        }
+                        previousTime = currentTime;
+                        
+                    }
+                }
+                ledCyclus = 0;
+            }
+            string byteString = intToByteString(ledCyclus);
+
+            if (byteString.at(5) == '1')
+            {
+                ledGreen.Set(true);
+            }
+            else
+            {
+                ledGreen.Set(false);
+            };
+
+            if (byteString.at(6) == '1')
+            {
+                ledBlue.Set(true);
+            }
+            else
+            {
+                ledBlue.Set(false);
+            };
+
+            if (byteString.at(7) == '1')
+            {
+                ledRed.Set(true);
+            }
+            else
+            {
+                ledRed.Set(false);
+            };
+        });
+
+    // static hal::InputPin button(ui.buttonOne);
+
+    // // tracer.tracer.Trace() << binary ;
+    // while (true) {
+
+    // }
+
+    eventInfrastructure.Run();
+    __builtin_unreachable();
+}
