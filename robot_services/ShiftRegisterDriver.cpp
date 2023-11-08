@@ -23,12 +23,12 @@ void ShiftRegisterDriver::ShiftOnLatch(infra::Function<void()> onShift)
 
 void ShiftRegisterDriver::EnableOutput()
 {
-    enable.Set(true);
+    enable.Set(false);
 }
 
 void ShiftRegisterDriver::DisableOutput()
 {
-    enable.Set(false);
+    enable.Set(true);
 }
 
 void ShiftRegisterDriver::ShiftByte(std::bitset<8> byte)
