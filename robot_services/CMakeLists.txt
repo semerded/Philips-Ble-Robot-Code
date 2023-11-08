@@ -12,6 +12,7 @@ target_sources(robot_services PRIVATE
 
 target_link_libraries(robot_services PUBLIC
     hal.interfaces
+    infra.util
 )
 
 if (ROBOT_BUILD_TESTS)

@@ -5,26 +5,48 @@ ShiftRegisterDriver::ShiftRegisterDriver(hal::GpioPin& enable, hal::GpioPin& lat
     , latch(latch)
     , clock(clock)
     , serialIn(serialIn)
+{}
+
+void ShiftRegisterDriver::SendDataOnClock(bool bit)
+{
+    clock.Set(false);
+    serialIn.Set(bit);
+    clock.Set(true);
+}
+
+void ShiftRegisterDriver::ShiftOnLatch(infra::Function<void()> onShift)
+{
+    latch.Set(false);
+    onShift();
+    latch.Set(true);
+}
+
+void ShiftRegisterDriver::EnableOutput()
 {
     enable.Set(true);
 }
 
-ShiftRegisterDriver::~ShiftRegisterDriver()
+void ShiftRegisterDriver::DisableOutput()
 {
     enable.Set(false);
 }
 
-void ShiftRegisterDriver::SetData(std::bitset<8> byte)
+void ShiftRegisterDriver::ShiftByte(std::bitset<8> byte)
 {
-    latch.Set(false);
-    for (auto i = 7; i >= 0; --i)
-    {
-        clock.Set(false);
+    ShiftOnLatch([this, byte]()
+        {
+            for (auto i = 7; i >= 0; --i)
+            {
+                auto bit = byte.test(i);
+                SendDataOnClock(bit);
+            }
+        });
+}
 
-        auto bit = byte.test(i);
-        serialIn.Set(bit);
-
-        clock.Set(true);
-    }
-    latch.Set(true);
+void ShiftRegisterDriver::ShiftBit(bool bit)
+{
+    ShiftOnLatch([this, bit]()
+        {
+            SendDataOnClock(bit);
+        });
 }

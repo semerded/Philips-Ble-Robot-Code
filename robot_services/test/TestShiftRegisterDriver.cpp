@@ -1,5 +1,4 @@
 #include "hal/interfaces/test_doubles/GpioMock.hpp"
-#include "infra/util/Function.hpp"
 #include "robot_services/ShiftRegisterDriver.hpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -22,22 +21,26 @@ public:
     testing::StrictMock<hal::GpioPinMock> clock;
     testing::StrictMock<hal::GpioPinMock> serialIn;
 
-    infra::Execute execute{ [this]
-        {
-            EXPECT_CALL(enable, Set(true));
-        } };
     ShiftRegisterDriver driver{ enable, latch, clock, serialIn };
-    infra::ExecuteOnDestruction dexecute{ [this]
-        {
-            EXPECT_CALL(enable, Set(false));
-        } };
 };
 
 TEST_F(ShiftRegisterDriverTest, initialization)
 {
 }
 
-TEST_F(ShiftRegisterDriverTest, SetData)
+TEST_F(ShiftRegisterDriverTest, EnableOutput)
+{
+    EXPECT_CALL(enable, Set(true));
+    driver.EnableOutput();
+}
+
+TEST_F(ShiftRegisterDriverTest, DisableOutput)
+{
+    EXPECT_CALL(enable, Set(false));
+    driver.DisableOutput();
+}
+
+TEST_F(ShiftRegisterDriverTest, ShiftByte)
 {
     testing::InSequence seq;
 
@@ -49,5 +52,17 @@ TEST_F(ShiftRegisterDriverTest, SetData)
 
     EXPECT_CALL(latch, Set(true));
 
-    driver.SetData(0b00110001);
+    driver.ShiftByte(0b00110001);
 }
+
+TEST_F(ShiftRegisterDriverTest, ShiftBit)
+{
+    testing::InSequence seq;
+
+    EXPECT_CALL(latch, Set(false));
+    ExpectSerialDataOnClock(true);
+    EXPECT_CALL(latch, Set(true));
+
+    driver.ShiftBit(true);
+}
+

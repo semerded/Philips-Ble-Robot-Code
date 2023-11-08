@@ -14,5 +14,6 @@
       "llvm-vs-code-extensions.vscode-clangd",
       "webfreak.debug",
       "marus25.cortex-debug",
+      "mhutchie.git-graph"
     ]
   }
