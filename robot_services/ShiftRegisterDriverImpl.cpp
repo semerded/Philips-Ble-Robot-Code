@@ -7,7 +7,7 @@ ShiftRegisterDriverImpl::ShiftRegisterDriverImpl(hal::GpioPin& enable, hal::Gpio
     , serialIn(serialIn)
 {}
 
-void ShiftRegisterDriverImpl::SendDataOnClock(bool bit)
+void ShiftRegisterDriverImpl::SendBitOnClock(bool bit)
 {
     clock.Set(false);
     serialIn.Set(bit);
@@ -38,7 +38,7 @@ void ShiftRegisterDriverImpl::ShiftByte(std::bitset<8> byte)
             for (auto i = 7; i >= 0; --i)
             {
                 auto bit = byte.test(i);
-                SendDataOnClock(bit);
+                SendBitOnClock(bit);
             }
         });
 }
@@ -47,6 +47,6 @@ void ShiftRegisterDriverImpl::ShiftBit(bool bit)
 {
     ShiftOnLatch([this, bit]()
         {
-            SendDataOnClock(bit);
+            SendBitOnClock(bit);
         });
 }

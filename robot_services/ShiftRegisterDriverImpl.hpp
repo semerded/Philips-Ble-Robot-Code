@@ -18,7 +18,7 @@ public:
     void ShiftBit(bool bit) override;
 
 private:
-    void SendDataOnClock(bool bit);
+    void SendBitOnClock(bool bit);
 
     void ShiftOnLatch(infra::Function<void()> onShift);
 
