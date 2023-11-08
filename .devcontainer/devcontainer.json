@@ -8,9 +8,11 @@
       "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
     ],
     "extensions": [
-      "llvm-vs-code-extensions.vscode-clangd",
-      "marus25.cortex-debug",
       "matepek.vscode-catch2-test-adapter",
-      "ms-vscode.cmake-tools"
+      "ms-vscode.cmake-tools",
+      "ms-vscode.cpptools",
+      "llvm-vs-code-extensions.vscode-clangd",
+      "webfreak.debug",
+      "marus25.cortex-debug",
     ]
   }

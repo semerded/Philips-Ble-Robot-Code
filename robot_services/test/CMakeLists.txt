@@ -1,1 +1,12 @@
-add_subdirectory(test)
+add_executable(robot_services_test)
+emil_add_test(robot_services_test)
+
+target_sources(robot_services_test PRIVATE
+    TestShiftRegisterDriver.cpp
+)
+
+target_link_libraries(robot_services_test PUBLIC
+    gmock_main
+    robot_services
+    hal.interfaces_test_doubles
+)
