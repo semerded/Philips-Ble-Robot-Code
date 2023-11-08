@@ -20,6 +20,7 @@ endif()
 
 add_version_header_target(robot.version)
 
+add_subdirectory(robot_interfaces)
 add_subdirectory(robot_services)
 add_subdirectory(robot)
 

@@ -1,37 +1,37 @@
-#include "robot_services/ShiftRegisterDriver.hpp"
+#include "robot_services/ShiftRegisterDriverImpl.hpp"
 
-ShiftRegisterDriver::ShiftRegisterDriver(hal::GpioPin& enable, hal::GpioPin& latch, hal::GpioPin& clock, hal::GpioPin& serialIn)
+ShiftRegisterDriverImpl::ShiftRegisterDriverImpl(hal::GpioPin& enable, hal::GpioPin& latch, hal::GpioPin& clock, hal::GpioPin& serialIn)
     : enable(enable)
     , latch(latch)
     , clock(clock)
     , serialIn(serialIn)
 {}
 
-void ShiftRegisterDriver::SendDataOnClock(bool bit)
+void ShiftRegisterDriverImpl::SendDataOnClock(bool bit)
 {
     clock.Set(false);
     serialIn.Set(bit);
     clock.Set(true);
 }
 
-void ShiftRegisterDriver::ShiftOnLatch(infra::Function<void()> onShift)
+void ShiftRegisterDriverImpl::ShiftOnLatch(infra::Function<void()> onShift)
 {
     latch.Set(false);
     onShift();
     latch.Set(true);
 }
 
-void ShiftRegisterDriver::EnableOutput()
+void ShiftRegisterDriverImpl::EnableOutput()
 {
     enable.Set(false);
 }
 
-void ShiftRegisterDriver::DisableOutput()
+void ShiftRegisterDriverImpl::DisableOutput()
 {
     enable.Set(true);
 }
 
-void ShiftRegisterDriver::ShiftByte(std::bitset<8> byte)
+void ShiftRegisterDriverImpl::ShiftByte(std::bitset<8> byte)
 {
     ShiftOnLatch([this, byte]()
         {
@@ -43,7 +43,7 @@ void ShiftRegisterDriver::ShiftByte(std::bitset<8> byte)
         });
 }
 
-void ShiftRegisterDriver::ShiftBit(bool bit)
+void ShiftRegisterDriverImpl::ShiftBit(bool bit)
 {
     ShiftOnLatch([this, bit]()
         {

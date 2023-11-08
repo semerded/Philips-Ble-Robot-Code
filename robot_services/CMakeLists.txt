@@ -6,13 +6,14 @@ target_include_directories(robot_services PUBLIC
 )
 
 target_sources(robot_services PRIVATE
-    ShiftRegisterDriver.cpp
-    ShiftRegisterDriver.hpp
-    MotorShieldControllerDc.cpp
-    MotorShieldControllerDc.hpp
+    ShiftRegisterDriverImpl.cpp
+    ShiftRegisterDriverImpl.hpp
+    MotorShieldControllerDcImpl.cpp
+    MotorShieldControllerDcImpl.hpp
 )
 
 target_link_libraries(robot_services PUBLIC
+    robot_interfaces
     hal.interfaces
     infra.util
 )

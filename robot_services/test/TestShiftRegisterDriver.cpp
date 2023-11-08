@@ -1,5 +1,5 @@
 #include "hal/interfaces/test_doubles/GpioMock.hpp"
-#include "robot_services/ShiftRegisterDriver.hpp"
+#include "robot_services/ShiftRegisterDriverImpl.hpp"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include <cstdint>
@@ -21,7 +21,7 @@ public:
     testing::StrictMock<hal::GpioPinMock> clock;
     testing::StrictMock<hal::GpioPinMock> serialIn;
 
-    ShiftRegisterDriver driver{ enable, latch, clock, serialIn };
+    ShiftRegisterDriverImpl driver{ enable, latch, clock, serialIn };
 };
 
 TEST_F(ShiftRegisterDriverTest, initialization)
@@ -30,13 +30,13 @@ TEST_F(ShiftRegisterDriverTest, initialization)
 
 TEST_F(ShiftRegisterDriverTest, EnableOutput)
 {
-    EXPECT_CALL(enable, Set(true));
+    EXPECT_CALL(enable, Set(false));
     driver.EnableOutput();
 }
 
 TEST_F(ShiftRegisterDriverTest, DisableOutput)
 {
-    EXPECT_CALL(enable, Set(false));
+    EXPECT_CALL(enable, Set(true));
     driver.DisableOutput();
 }
 

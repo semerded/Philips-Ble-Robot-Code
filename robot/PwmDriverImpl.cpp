@@ -1,4 +1,4 @@
-#include "robot/PwmDriver.hpp"
+#include "robot/PwmDriverImpl.hpp"
 #include <cstdint>
 #include <cstdlib>
 #include <algorithm>
@@ -11,7 +11,7 @@ namespace
     auto period = (timerFrequency / pwmFrequency) - 1;
 }
 
-PwmDriver::PwmDriver(TIM_TypeDef* timer)
+PwmDriverImpl::PwmDriverImpl(TIM_TypeDef* timer)
 {
     handle.Instance = timer;
     handle.Init.Prescaler = prescaler;
@@ -31,7 +31,7 @@ PwmDriver::PwmDriver(TIM_TypeDef* timer)
         std::abort();
 }
 
-void PwmDriver::SetDutyCycle(uint8_t dutyCycle)
+void PwmDriverImpl::SetDutyCycle(uint8_t dutyCycle)
 {
     if (dutyCycle != std::clamp<uint8_t>(dutyCycle, 0, 100))
         std::abort();

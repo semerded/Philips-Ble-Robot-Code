@@ -3,7 +3,7 @@ emil_add_test(robot_services_test)
 
 target_sources(robot_services_test PRIVATE
     TestShiftRegisterDriver.cpp
-    MotorShieldControllerDc.cpp
+    TestMotorShieldControllerDc.cpp
 )
 
 target_link_libraries(robot_services_test PUBLIC

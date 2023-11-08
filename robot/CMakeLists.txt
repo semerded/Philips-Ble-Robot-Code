@@ -7,12 +7,13 @@ if ("${TARGET_MCU}" STREQUAL stm32wb55)
     )
 
     target_sources(hal_st.robot PRIVATE
-        PwmDriver.cpp
-        PwmDriver.hpp
+        PwmDriverImpl.cpp
+        PwmDriverImpl.hpp
         Main.cpp
     )
 
     target_link_libraries(hal_st.robot PRIVATE
+        robot_interfaces
         services.util
         hal_st.instantiations
         robot_services
