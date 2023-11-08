@@ -1,4 +1,4 @@
-if ("${TARGET_MCU}" STREQUAL stm32f767)
+if ("${TARGET_MCU}" STREQUAL stm32wb55)
     add_executable(hal_st.robot)
 
     target_include_directories(hal_st.robot PUBLIC
@@ -7,13 +7,15 @@ if ("${TARGET_MCU}" STREQUAL stm32f767)
     )
 
     target_sources(hal_st.robot PRIVATE
+        PwmDriver.cpp
+        PwmDriver.hpp
         Main.cpp
     )
 
     target_link_libraries(hal_st.robot PRIVATE
         services.util
         hal_st.instantiations
-        infra.timer
+        robot_services
     )
 
     halst_target_default_linker_scripts(hal_st.robot)

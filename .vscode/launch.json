@@ -31,6 +31,23 @@
             "device": "STM32F767ZI"
         },
         {
+            "name": "stm32wb55rg",
+            "cwd": "${workspaceFolder}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "device": "STM32WB55RG",
+            "servertype": "external",
+            "showDevDebugOutput": "both",
+            "gdbTarget": "host.docker.internal:2334",
+            "overrideLaunchCommands": [
+                "monitor reset",
+                "-target-download",
+                "monitor reset"
+            ],
+            "overrideRestartCommands": [ "monitor reset" ]
+        },
+        {
             "name": "stm32g431 without container",
             "cwd": "${workspaceRoot}",
             "request": "launch",
