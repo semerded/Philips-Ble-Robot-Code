@@ -13,6 +13,7 @@ if ("${TARGET_MCU}" STREQUAL stm32f767)
     target_link_libraries(hal_st.robot PRIVATE
         services.util
         hal_st.instantiations
+        infra.timer
     )
 
     halst_target_default_linker_scripts(hal_st.robot)
