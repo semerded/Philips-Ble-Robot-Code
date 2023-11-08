@@ -34,82 +34,10 @@ public:
 };
 
 TEST_F(ShiftRegisterDriverTest, initialization)
-{}
+{
+}
 
 TEST_F(ShiftRegisterDriverTest, SetData)
-{
-    EXPECT_CALL(latch, Set(testing::_)).Times(2)
-        .WillOnce(testing::Invoke([](bool value)
-            {
-                EXPECT_FALSE(value);
-            }))
-        .WillOnce(testing::Invoke([](bool value)
-            {
-                EXPECT_TRUE(value);
-            }));
-
-    EXPECT_CALL(clock, Set(testing::_)).Times(16).WillRepeatedly(testing::Invoke([](bool value)
-        {
-            static bool comparator = false;
-            EXPECT_EQ(comparator, value);
-            comparator = !comparator;
-        }));
-
-    EXPECT_CALL(serialIn, Set(testing::_)).Times(8).WillRepeatedly(testing::Invoke([](bool value)
-        {
-            static std::vector<bool> data = { true, false, false, false, true, true, false, false };
-
-            EXPECT_EQ(data.back(), value);
-            data.pop_back();
-        }));
-
-    driver.SetData(0b00110001);
-}
-
-TEST_F(ShiftRegisterDriverTest, SetData_insequence)
-{
-    testing::InSequence seq;
-
-    EXPECT_CALL(latch, Set(false));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(false));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(false));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(true));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(true));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(false));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(false));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(false));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(clock, Set(false));
-    EXPECT_CALL(serialIn, Set(true));
-    EXPECT_CALL(clock, Set(true));
-
-    EXPECT_CALL(latch, Set(true));
-
-    driver.SetData(0b00110001);
-}
-
-TEST_F(ShiftRegisterDriverTest, SetData_insequence_refactored)
 {
     testing::InSequence seq;
 
