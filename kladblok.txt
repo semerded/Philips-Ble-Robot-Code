@@ -1,0 +1,19 @@
+ShiftRegisterDriver(enable, latch, clock, sin):
+    void ShiftData(uint8_t data)
+    void ShiftData(bool data)
+    void EnableOutput()
+    void DisableOutput()
+
+PwmDriver(config config, GpioPin& pin):
+    void SetDutyCycle(uint8_t dutyCycle)
+
+MotorShieldControllerDc(ShiftRegisterDriver& shiftRegister, PwmDriver& pwmM1, PwmDriver& pwmM2, PwmDriver& pwmM3, PwmDriver& pwmM4 )
+    void SetDirection(Motor motor, Direction direction)
+    void SetSpeed(Motor motor, Percentage percentage)
+
+CarController(MotorShieldControllerDc motorShield)
+    DriveForwards()
+
+SystemTransportLayer -> SystemTransportLayerWithBondPercistence
+Create new GapSt specific for our use case
+GattSt can be reused
