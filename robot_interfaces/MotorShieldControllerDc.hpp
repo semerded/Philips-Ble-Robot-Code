@@ -3,8 +3,9 @@
 
 #include <cstdint>
 
-enum class Direction
+enum class Direction : uint8_t
 {
+    stop,
     left,
     right
 };

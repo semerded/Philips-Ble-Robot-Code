@@ -1,80 +1,49 @@
 #include "robot_services/MotorShieldControllerDcImpl.hpp"
+#include "infra/util/ReallyAssert.hpp"
 #include "robot_interfaces/MotorShieldControllerDc.hpp"
-#include <array>
+#include <algorithm>
 #include <bitset>
-#include <cstddef>
 #include <cstdint>
-#include <map>
-#include <string>
-#include <vector>
 
 MotorShieldControllerDcImpl::MotorShieldControllerDcImpl(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4)
     : shiftRegister(shiftRegister)
-    , pwm1(pwm1)
-    , pwm2(pwm2)
-    , pwm3(pwm3)
-    , pwm4(pwm4)
 {
+    shiftRegister.ShiftByte(0);
+    shiftRegister.EnableOutput();
 
-    // pwm1.SetDutyCycle(0);
-    // pwm2.SetDutyCycle(0);
-    // pwm3.SetDutyCycle(0);
-    // pwm4.SetDutyCycle(0);
+    motorMapping.insert({ Motor::one, MotorEntry{ pwm1, { 2, 3 } } });
+    motorMapping.insert({ Motor::two, MotorEntry{ pwm2, { 1, 4 } } });
+    motorMapping.insert({ Motor::three, MotorEntry{ pwm3, { 5, 7 } } });
+    motorMapping.insert({ Motor::four, MotorEntry{ pwm4, { 0, 6 } } });
 
+    ResetMotorsSpeed();
 }
 
-void MotorShieldControllerDcImpl::MotorConfig(Motor motor, uint8_t MotorIDleft, uint8_t MotorIDright)
+MotorShieldControllerDcImpl::~MotorShieldControllerDcImpl()
 {
-    std::array<uint8_t, 2>motorDirectionIDs = {MotorIDleft, MotorIDright};
-    motorMapping.insert({motor, motorDirectionIDs});
-
-    // [motor1: {2, 3}]
-}
-
-std::map<Motor, std::array<uint8_t, 2>> MotorShieldControllerDcImpl::GetMotorMapping()
-{
-    return motorMapping;
+    shiftRegister.DisableOutput();
+    ResetMotorsSpeed();
 }
 
 void MotorShieldControllerDcImpl::SetDirection(Motor motor, Direction direction)
 {
-    // int motorNumber = static_cast<uint8_t>(motor);
-    std::array<uint8_t, 2>motorIDs = motorMapping.at(motor);
+    RegisterPosition registerPosition = motorMapping.at(motor).position;
 
+    std::bitset<2> directionSet = static_cast<uint8_t>(direction);
+    shiftRegisterByte[registerPosition[0]] = directionSet.test(0);
+    shiftRegisterByte[registerPosition[1]] = directionSet.test(1);
 
-    if (direction == Direction::left)
-    {
-        motorIDs[0] = 1;
-        motorIDs[1] = 0;
-    }
-    else
-    {
-        motorIDs[0] = 0;
-        motorIDs[1] = 1;
-    }
-    shiftRegister.EnableOutput();
     shiftRegister.ShiftByte(shiftRegisterByte);
-    shiftRegister.DisableOutput();
 }
 
 void MotorShieldControllerDcImpl::SetSpeed(Motor motor, uint8_t percentage)
 {
-    switch (motor)
-    {
-        case Motor::one:
-            pwm1.SetDutyCycle(percentage);
-            break;
+    really_assert(percentage == std::clamp<uint8_t>(percentage, 0, 100));
+    motorMapping.at(motor).pwm.SetDutyCycle(percentage);
+}
 
-        case Motor::two:
-            pwm2.SetDutyCycle(percentage);
-            break;
-
-        case Motor::three:
-            pwm3.SetDutyCycle(percentage);
-            break;
-
-        case Motor::four:
-            pwm4.SetDutyCycle(percentage);
-            break;
-    }
+void MotorShieldControllerDcImpl::ResetMotorsSpeed()
+{
+    for (auto& motor : motorMapping)
+        motor.second.pwm.SetDutyCycle(0);
 }

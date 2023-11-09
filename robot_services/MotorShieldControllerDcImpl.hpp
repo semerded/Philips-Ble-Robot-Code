@@ -14,24 +14,29 @@ class MotorShieldControllerDcImpl
     : public MotorShieldControllerDc
 {
 public:
+    using RegisterPosition = std::array<uint8_t, 2>;
+
     MotorShieldControllerDcImpl(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4);
+    ~MotorShieldControllerDcImpl();
 
     // Implementation of MotorShieldControllerDc
     void SetDirection(Motor motor, Direction direction) override;
     void SetSpeed(Motor motor, uint8_t percentage) override;
 
-    void MotorConfig(Motor motor, uint8_t MotorIDleft, uint8_t MotorIDrigth);
-    std::map<Motor, std::array<uint8_t, 2>> GetMotorMapping();
+private:
+    void ResetMotorsSpeed();
 
 private:
+    struct MotorEntry
+    {
+        PwmDriver& pwm;
+        RegisterPosition position;
+    };
+
     ShiftRegisterDriver& shiftRegister;
-    PwmDriver& pwm1;
-    PwmDriver& pwm2;
-    PwmDriver& pwm3;
-    PwmDriver& pwm4;
 
     std::bitset<8> shiftRegisterByte;
-    std::map<Motor, std::array<uint8_t, 2>> motorMapping;
+    std::map<Motor, MotorEntry> motorMapping;
 };
 
 #endif
