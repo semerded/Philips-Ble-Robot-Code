@@ -13,9 +13,6 @@ class ShiftRegisterDriverMock
         MOCK_METHOD(void, DisableOutput, ());
         MOCK_METHOD(void, ShiftByte, (std::bitset<8> byte));
         MOCK_METHOD(void, ShiftBit, (bool bit));
-
-
-
 };
 
 #endif 
