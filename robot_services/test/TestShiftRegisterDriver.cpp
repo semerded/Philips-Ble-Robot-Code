@@ -46,7 +46,7 @@ TEST_F(ShiftRegisterDriverTest, ShiftByte)
 
     EXPECT_CALL(latch, Set(false));
 
-    static std::vector<bool> data = { false, false, true, true, false, false, false, true };
+    std::vector<bool> data = { false, false, true, true, false, false, false, true };
     for (auto bitValue : data)
         ExpectSerialDataOnClock(bitValue);
 

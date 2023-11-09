@@ -9,12 +9,12 @@ enum class Direction
     right
 };
 
-enum class Motor
+enum class Motor : uint8_t
 {
-    one = 1,
-    two = 2,
-    three = 3,
-    four = 4
+    one,
+    two,
+    three,
+    four
 };
 
 class MotorShieldControllerDc

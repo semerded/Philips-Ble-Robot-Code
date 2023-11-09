@@ -19,22 +19,24 @@ public:
     MotorShieldControllerDcImpl controller{ shiftRegister, pwm1, pwm2, pwm3, pwm4 };
 };
 
-TEST_F(MotorShieldControllerDcTest, initialization)
-{
-}
+// TEST_F(MotorShieldControllerDcTest, initialization)
+// {
+// }
 
-TEST_F(MotorShieldControllerDcTest, EnableController)
-{
-}
+// TEST_F(MotorShieldControllerDcTest, EnableController)
+// {
+// }
 
 TEST_F(MotorShieldControllerDcTest, SetDirection)
 {
     testing::InSequence seq;
-    static std::bitset<8> testByte (std::string("10010000"));
+    std::bitset<8> testByte (0b00000001);
 
     EXPECT_CALL(shiftRegister, ShiftByte(testByte));
-
     controller.SetDirection(Motor::one, Direction::left);
+
+    testByte = 0b00000101;
+    EXPECT_CALL(shiftRegister, ShiftByte(testByte));
     controller.SetDirection(Motor::two, Direction::right);
 
 }

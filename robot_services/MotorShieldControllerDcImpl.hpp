@@ -22,6 +22,8 @@ private:
     PwmDriver& pwm2;
     PwmDriver& pwm3;
     PwmDriver& pwm4;
+
+    std::bitset<8> shiftRegisterByte;
 };
 
 #endif

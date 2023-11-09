@@ -5,11 +5,6 @@
 #include <cstdint>
 #include <string>
 
-namespace
-{
-    static std::bitset<8> shiftRegisterByte;
-}
-
 MotorShieldControllerDcImpl::MotorShieldControllerDcImpl(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4)
     : shiftRegister(shiftRegister)
     , pwm1(pwm1)
@@ -18,15 +13,15 @@ MotorShieldControllerDcImpl::MotorShieldControllerDcImpl(ShiftRegisterDriver& sh
     , pwm4(pwm4)
 {
 
-    pwm1.SetDutyCycle(0);
-    pwm2.SetDutyCycle(0);
-    pwm3.SetDutyCycle(0);
-    pwm4.SetDutyCycle(0);
+    // pwm1.SetDutyCycle(0);
+    // pwm2.SetDutyCycle(0);
+    // pwm3.SetDutyCycle(0);
+    // pwm4.SetDutyCycle(0);
 }
 
 void MotorShieldControllerDcImpl::SetDirection(Motor motor, Direction direction)
 {
-    int motorNumber = --*(int*)motor;
+    int motorNumber = static_cast<uint8_t>(motor);
 
     if (direction == Direction::left)
     {
@@ -38,7 +33,7 @@ void MotorShieldControllerDcImpl::SetDirection(Motor motor, Direction direction)
         shiftRegisterByte[motorNumber] = 0;
         shiftRegisterByte[motorNumber + 1] = 1;
     }
-    shiftRegister.EnableOutput();
+    // shiftRegister.EnableOutput();
     shiftRegister.ShiftByte(shiftRegisterByte);
 }
 
