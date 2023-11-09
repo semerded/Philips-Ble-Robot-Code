@@ -31,7 +31,7 @@ int main()
     static ShiftRegisterDriver shiftRegisterDriver(enable, latch, clock, serialIn);
 
     shiftRegisterDriver.ShiftByte(0b11'00'00'00);
-    shiftRegisterDriver.DisableOutput();
+    shiftRegisterDriver.EnableOutput();
 
     __HAL_RCC_TIM1_CLK_ENABLE();
     __HAL_RCC_TIM2_CLK_ENABLE();

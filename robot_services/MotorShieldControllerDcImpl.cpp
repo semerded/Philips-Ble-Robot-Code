@@ -1,19 +1,17 @@
 #include "robot_services/MotorShieldControllerDcImpl.hpp"
 
 MotorShieldControllerDcImpl::MotorShieldControllerDcImpl(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4)
-: shiftRegister(shiftRegister)
-, pwmM1(pwmM1)
-, pwmM2(pwmM2)
-, pwmM3(pwmM3)
-, pwmM4(pwmM4)
+    : shiftRegister(shiftRegister)
+    , pwm1(pwm1)
+    , pwm2(pwm2)
+    , pwm3(pwm3)
+    , pwm4(pwm4)
 {}
 
-void MotorShieldControllerDc::SetDirection()
+void MotorShieldControllerDcImpl::SetDirection(Motor motor, Direction direction)
 {
-
 }
 
-void MotorShieldControllerDc::SetSpeed()
+void MotorShieldControllerDcImpl::SetSpeed(Motor motor, uint8_t percentage)
 {
-
 }

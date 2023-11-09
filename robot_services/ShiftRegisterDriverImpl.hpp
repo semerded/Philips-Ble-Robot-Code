@@ -1,5 +1,5 @@
-#ifndef SHIFT_REGISTER_DRIVER_HPP
-#define SHIFT_REGISTER_DRIVER_HPP
+#ifndef ROBOT_SERVICES_SHIFT_REGISTER_DRIVER_IMPL
+#define ROBOT_SERVICES_SHIFT_REGISTER_DRIVER_IMPL
 
 #include "hal/interfaces/Gpio.hpp"
 #include "infra/util/Function.hpp"

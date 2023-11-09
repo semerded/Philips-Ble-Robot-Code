@@ -1,5 +1,5 @@
-#ifndef MOTOR_SHIELD_CONTROLLER_DC_HPP
-#define MOTOR_SHIELD_CONTROLLER_DC_HPP
+#ifndef ROBOT_SERVICES_MOTOR_SHIELD_CONTROLLER_DC_IMPL_HPP
+#define ROBOT_SERVICES_MOTOR_SHIELD_CONTROLLER_DC_IMPL_HPP
 
 #include "robot_interfaces/MotorShieldControllerDc.hpp"
 #include "robot_interfaces/PwmDriver.hpp"
@@ -10,10 +10,10 @@ class MotorShieldControllerDcImpl
     : public MotorShieldControllerDc
 {
 public:
-    MotorShieldControllerDc(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4);
+    MotorShieldControllerDcImpl(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4);
 
-    void SetDirection(Motor motor, Direction forwards) override;
-
+    // Implementation of MotorShieldControllerDc
+    void SetDirection(Motor motor, Direction direction) override;
     void SetSpeed(Motor motor, uint8_t percentage) override;
 
 private:
