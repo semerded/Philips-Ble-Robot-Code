@@ -1,16 +1,27 @@
 #ifndef MOTOR_SHIELD_CONTROLLER_DC_HPP
 #define MOTOR_SHIELD_CONTROLLER_DC_HPP
 
-// #include "robot_services/PwmDriver.hpp"
-// #include "robot_services/ShiftRegisterDriver.hpp"
-// #include <cstdint>
-// class MotorShieldControllerDc
-// {
-//     MotorShieldControllerDc(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm);
+#include "robot_interfaces/MotorShieldControllerDc.hpp"
+#include "robot_interfaces/PwmDriver.hpp"
+#include "robot_interfaces/ShiftRegisterDriver.hpp"
+#include <cstdint>
 
-//     void SetDirection(uint8_t motor, bool forwards);
+class MotorShieldControllerDcImpl
+    : public MotorShieldControllerDc
+{
+public:
+    MotorShieldControllerDc(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4);
 
-//     void SetSpeed(uint8_t motor, uint8_t percentage);
-// };
+    void SetDirection(Motor motor, Direction forwards) override;
+
+    void SetSpeed(Motor motor, uint8_t percentage) override;
+
+private:
+    ShiftRegisterDriver& shiftRegister;
+    PwmDriver& pwm1;
+    PwmDriver& pwm2;
+    PwmDriver& pwm3;
+    PwmDriver& pwm4;
+};
 
 #endif
