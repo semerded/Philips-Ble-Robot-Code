@@ -11,10 +11,10 @@ enum class Direction
 
 enum class Motor
 {
-    one,
-    two,
-    three,
-    four
+    one = 1,
+    two = 2,
+    three = 3,
+    four = 4
 };
 
 class MotorShieldControllerDc
