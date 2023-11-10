@@ -1,5 +1,11 @@
 #include "robot_services/RobotServiceDefinition.hpp"
 
+namespace
+{
+    constexpr auto maxPacketSize = 23 - 3; // Optimization as found in ST document AN5289 Rev 7 (Section 7.6.9 How to maximize data throughput).
+    constexpr auto permissionFlags = services::GattServerCharacteristic::PermissionFlags::encryptedWrite;
+}
+
 const services::AttAttribute::Uuid128& RobotServiceDefinition::ServiceUuid()
 {
     return serviceUuid;
@@ -47,4 +53,34 @@ RobotServiceGattServer::RobotServiceGattServer()
 services::GattServerService& RobotServiceGattServer::Service()
 {
     return service;
+}
+
+services::GattServerCharacteristicUpdate& RobotServiceGattServer::SpeedLeft()
+{
+    return speedLeft;
+}
+
+services::GattServerCharacteristicUpdate& RobotServiceGattServer::SpeedRight()
+{
+    return speedRight;
+}
+
+services::GattServerCharacteristicUpdate& RobotServiceGattServer::DirectionLeft()
+{
+    return directionLeft;
+}
+
+services::GattServerCharacteristicUpdate& RobotServiceGattServer::DirectionRight()
+{
+    return directionRight;
+}
+
+services::GattServerCharacteristicUpdate& RobotServiceGattServer::Stop()
+{
+    return stop;
+}
+
+services::GattServerCharacteristicUpdate& RobotServiceGattServer::Ack()
+{
+    return ack;
 }

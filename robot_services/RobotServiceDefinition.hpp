@@ -33,11 +33,14 @@ class RobotServiceGattServer
 public:
     RobotServiceGattServer();
     services::GattServerService& Service();
+    services::GattServerCharacteristicUpdate& SpeedLeft();
+    services::GattServerCharacteristicUpdate& SpeedRight();
+    services::GattServerCharacteristicUpdate& DirectionLeft();
+    services::GattServerCharacteristicUpdate& DirectionRight();
+    services::GattServerCharacteristicUpdate& Stop();
+    services::GattServerCharacteristicUpdate& Ack();
 
 private:
-    static constexpr auto maxPacketSize = 23 - 3; // Optimization as found in ST document AN5289 Rev 7 (Section 7.6.9 How to maximize data throughput).
-    static constexpr auto permissionFlags = services::GattServerCharacteristic::PermissionFlags::encryptedWrite;
-
     services::GattServerService service{ RobotServiceDefinition::ServiceUuid() };
     services::GattServerCharacteristicImpl speedLeft;
     services::GattServerCharacteristicImpl speedRight;
