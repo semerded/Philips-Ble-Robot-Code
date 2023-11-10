@@ -12,6 +12,8 @@ target_sources(robot_services PRIVATE
     ShiftRegisterDriverImpl.hpp
     MotorShieldControllerDcImpl.cpp
     MotorShieldControllerDcImpl.hpp
+    BasicCarControl.cpp
+    BasicCarControl.hpp
 )
 
 target_link_libraries(robot_services PUBLIC
