@@ -1,21 +1,15 @@
 #ifndef ROBOT_SERVICES_MOTOR_SHIELD_CONTROLLER_DC_IMPL_HPP
 #define ROBOT_SERVICES_MOTOR_SHIELD_CONTROLLER_DC_IMPL_HPP
 
+#include "infra/util/BoundedVector.hpp"
 #include "robot_interfaces/MotorShieldControllerDc.hpp"
 #include "robot_interfaces/PwmDriver.hpp"
 #include "robot_interfaces/ShiftRegisterDriver.hpp"
-#include <array>
-#include <cstdint>
-#include <map>
-#include <sys/types.h>
-#include <vector>
 
 class MotorShieldControllerDcImpl
     : public MotorShieldControllerDc
 {
 public:
-    using RegisterPosition = std::array<uint8_t, 2>;
-
     MotorShieldControllerDcImpl(ShiftRegisterDriver& shiftRegister, PwmDriver& pwm1, PwmDriver& pwm2, PwmDriver& pwm3, PwmDriver& pwm4);
     ~MotorShieldControllerDcImpl();
 
@@ -29,14 +23,21 @@ private:
 private:
     struct MotorEntry
     {
+        MotorEntry(PwmDriver& pwm, uint8_t positionA, uint8_t positionB)
+            : pwm(pwm)
+            , positionA(positionA)
+            , positionB(positionB)
+        {}
+
         PwmDriver& pwm;
-        RegisterPosition position;
+        uint8_t positionA;
+        uint8_t positionB;
     };
 
     ShiftRegisterDriver& shiftRegister;
 
     std::bitset<8> shiftRegisterByte;
-    std::map<Motor, MotorEntry> motorMapping;
+    infra::BoundedVector<MotorEntry>::WithMaxSize<4> motorMapping;
 };
 
 #endif

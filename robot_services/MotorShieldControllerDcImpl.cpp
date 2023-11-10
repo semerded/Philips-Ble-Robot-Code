@@ -11,10 +11,10 @@ MotorShieldControllerDcImpl::MotorShieldControllerDcImpl(ShiftRegisterDriver& sh
     shiftRegister.ShiftByte(0);
     shiftRegister.EnableOutput();
 
-    motorMapping.insert({ Motor::one, MotorEntry{ pwm1, { 2, 3 } } });
-    motorMapping.insert({ Motor::two, MotorEntry{ pwm2, { 1, 4 } } });
-    motorMapping.insert({ Motor::three, MotorEntry{ pwm3, { 5, 7 } } });
-    motorMapping.insert({ Motor::four, MotorEntry{ pwm4, { 0, 6 } } });
+    motorMapping.emplace_back( pwm1, 2, 3 );
+    motorMapping.emplace_back( pwm2, 1, 4 );
+    motorMapping.emplace_back( pwm3, 5, 7 );
+    motorMapping.emplace_back( pwm4, 0, 6 );
 
     ResetMotorsSpeed();
 }
@@ -27,11 +27,11 @@ MotorShieldControllerDcImpl::~MotorShieldControllerDcImpl()
 
 void MotorShieldControllerDcImpl::SetDirection(Motor motor, Direction direction)
 {
-    RegisterPosition registerPosition = motorMapping.at(motor).position;
+    auto motorEntry = motorMapping[static_cast<uint8_t>(motor)];
 
     std::bitset<2> directionSet = static_cast<uint8_t>(direction);
-    shiftRegisterByte[registerPosition[0]] = directionSet.test(0);
-    shiftRegisterByte[registerPosition[1]] = directionSet.test(1);
+    shiftRegisterByte[motorEntry.positionA] = directionSet.test(0);
+    shiftRegisterByte[motorEntry.positionB] = directionSet.test(1);
 
     shiftRegister.ShiftByte(shiftRegisterByte);
 }
@@ -39,11 +39,11 @@ void MotorShieldControllerDcImpl::SetDirection(Motor motor, Direction direction)
 void MotorShieldControllerDcImpl::SetSpeed(Motor motor, uint8_t percentage)
 {
     really_assert(percentage == std::clamp<uint8_t>(percentage, 0, 100));
-    motorMapping.at(motor).pwm.SetDutyCycle(percentage);
+    motorMapping[static_cast<uint8_t>(motor)].pwm.SetDutyCycle(percentage);
 }
 
 void MotorShieldControllerDcImpl::ResetMotorsSpeed()
 {
     for (auto& motor : motorMapping)
-        motor.second.pwm.SetDutyCycle(0);
+        motor.pwm.SetDutyCycle(0);
 }

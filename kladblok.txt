@@ -30,3 +30,18 @@ GattSt can be reused
 
 11000000 = motor a en b draaien naar links
 
+
+
+Service Control:
+    Characterisitc: Speed left
+        write
+    Characterisitc: Speed right
+        write
+    Characterisitc: Direction left
+        write
+    Characterisitc: Direction right
+        write
+    Characterisitc: Stop
+        write
+    Characterisitc: ack
+        notify
