@@ -6,6 +6,8 @@ target_include_directories(robot_services PUBLIC
 )
 
 target_sources(robot_services PRIVATE
+    RobotServiceDefinition.cpp
+    RobotServiceDefinition.hpp
     ShiftRegisterDriverImpl.cpp
     ShiftRegisterDriverImpl.hpp
     MotorShieldControllerDcImpl.cpp

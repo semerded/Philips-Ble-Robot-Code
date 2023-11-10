@@ -3,8 +3,8 @@
 #include "hal_st/instantiations/StmEventInfrastructure.hpp"
 #include "hal_st/stm32fxxx/DefaultClockNucleoWB55RG.hpp"
 #include "services/util/DebugLed.hpp"
-#include "robot_services/ShiftRegisterDriver.hpp"
-#include "robot/PwmDriver.hpp"
+#include "robot_services/ShiftRegisterDriverImpl.hpp"
+#include "robot/PwmDriverImpl.hpp"
 
 unsigned int hse_value = 32000000;
 
@@ -28,7 +28,7 @@ int main()
     static hal::GpioPinStm serialIn(hal::Port::C, 12);
     static hal::GpioPinStm enable(hal::Port::C, 13);
 
-    static ShiftRegisterDriver shiftRegisterDriver(enable, latch, clock, serialIn);
+    static ShiftRegisterDriverImpl shiftRegisterDriver(enable, latch, clock, serialIn);
 
     shiftRegisterDriver.ShiftByte(0b11'00'00'00);
     shiftRegisterDriver.EnableOutput();
@@ -41,8 +41,8 @@ int main()
     static hal::GpioPinStm pwmMotorThreePin(hal::Port::A, 15, hal::Drive::PushPull, hal::Speed::High, hal::WeakPull::Up);
     static hal::PeripheralPinStm pwmMotorThree(pwmMotorThreePin, hal::PinConfigTypeStm::timerChannel1, 2);
 
-    static PwmDriver PwmDriver1(TIM1);
-    static PwmDriver PwmDriver2(TIM2);
+    static PwmDriverImpl PwmDriver1(TIM1);
+    static PwmDriverImpl PwmDriver2(TIM2);
 
     PwmDriver1.SetDutyCycle(0);
     PwmDriver2.SetDutyCycle(0);

@@ -23,6 +23,7 @@ add_version_header_target(robot.version)
 add_subdirectory(robot_interfaces)
 add_subdirectory(robot_services)
 add_subdirectory(robot)
+add_subdirectory(ble_example)
 
 emil_exclude_directory_from_clang_format(amp-embedded-infra-lib)
 emil_exclude_directory_from_clang_format(amp-hal-st)
