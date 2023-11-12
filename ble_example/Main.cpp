@@ -9,11 +9,7 @@
 #include "hal_st/middlewares/ble_middleware/TracingSystemTransportLayer.hpp"
 #include "hal_st/stm32fxxx/DefaultClockNucleoWB55RG.hpp"
 #include "hal_st/stm32fxxx/UniqueDeviceId.hpp"
-#include "infra/stream/OutputStream.hpp"
-#include "infra/util/BoundedString.hpp"
 #include "infra/util/ByteRange.hpp"
-#include "infra/util/Function.hpp"
-#include "infra/util/Optional.hpp"
 #include "robot_services/RobotServiceDefinition.hpp"
 #include "services/ble/BondStorageSynchronizer.hpp"
 #include "services/util/DebugLed.hpp"
@@ -85,6 +81,13 @@ void PrintModuleInfoBanner(services::Tracer& tracer, const hal::MacAddress& macA
                    << "\r\n-------------------------------------------------";
 }
 
+void AddAdStructure(infra::BoundedVector<uint8_t>& buffer, uint8_t dataType, infra::ConstByteRange data)
+{
+    buffer.emplace_back(data.size() + 1);
+    buffer.emplace_back(dataType);
+    buffer.insert(buffer.end(), data.begin(), data.end());
+}
+
 class ConfigurationStoreInterfaceStub
     : public services::ConfigurationStoreInterface
 {
@@ -116,13 +119,6 @@ public:
         return 10;
     }
 };
-
-void AddAdStructure(infra::BoundedVector<uint8_t>& buffer, uint8_t dataType, infra::ConstByteRange data)
-{
-    buffer.emplace_back(data.size() + 1);
-    buffer.emplace_back(dataType);
-    buffer.insert(buffer.end(), data.begin(), data.end());
-}
 
 unsigned int hse_value = 32000000;
 
