@@ -9,14 +9,17 @@
 #include "hal_st/middlewares/ble_middleware/TracingSystemTransportLayer.hpp"
 #include "hal_st/stm32fxxx/DefaultClockNucleoWB55RG.hpp"
 #include "hal_st/stm32fxxx/UniqueDeviceId.hpp"
+#include "infra/stream/OutputStream.hpp"
+#include "infra/util/BoundedString.hpp"
 #include "infra/util/ByteRange.hpp"
 #include "infra/util/Function.hpp"
 #include "infra/util/Optional.hpp"
+#include "robot_services/RobotServiceDefinition.hpp"
 #include "services/ble/BondStorageSynchronizer.hpp"
 #include "services/util/DebugLed.hpp"
-#include "robot_services/RobotServiceDefinition.hpp"
+#include <array>
 #include <sys/_stdint.h>
-
+#include <sys/types.h>
 
 extern "C" void IPCC_C1_RX_IRQHandler(void)
 {
@@ -114,6 +117,13 @@ public:
     }
 };
 
+void AddAdStructure(infra::BoundedVector<uint8_t>& buffer, uint8_t dataType, infra::ConstByteRange data)
+{
+    buffer.emplace_back(data.size() + 1);
+    buffer.emplace_back(dataType);
+    buffer.insert(buffer.end(), data.begin(), data.end());
+}
+
 unsigned int hse_value = 32000000;
 
 int main()
@@ -138,7 +148,8 @@ int main()
     static infra::ByteRange flashRange{ flashStorage };
     static auto flashStorageAccess = services::ConfigurationStoreAccess<infra::ByteRange>{ configurationStore, flashRange };
 
-    static hal::GapPeripheralSt::GapService gapService{ "ble-robot", 0 };
+    static infra::BoundedConstString::WithStorage<9> deviceName = "ble-robot";
+    static hal::GapPeripheralSt::GapService gapService{ deviceName, 0 };
     static hal::GapPeripheralSt::RootKeys rootKeys;
     rootKeys.identity = { 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0, 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0 };
     rootKeys.encryption = { 0xFE, 0xDC, 0xBA, 0x09, 0x87, 0x65, 0x43, 0x21, 0xFE, 0xDC, 0xBA, 0x09, 0x87, 0x65, 0x43, 0x21 };
@@ -146,14 +157,12 @@ int main()
     static infra::Creator<services::BondStorageSynchronizer, BondStorageSynchronizerStub, void()> bondStorageSynchronizerCreator;
 
     static infra::BoundedVector<uint8_t>::WithMaxSize<services::GapPeripheral::maxAdvertisementDataSize> advertisementData = {};
+    static const auto flags = infra::enum_cast(services::GapPeripheral::AdvertisementFlags::brEdrNotSupported | services::GapPeripheral::AdvertisementFlags::leGeneralDiscoverableMode);
+    AddAdStructure(advertisementData, infra::enum_cast(services::GapAdvertisementDataType::flags), infra::MakeConstByteRange(flags));
+    AddAdStructure(advertisementData, infra::enum_cast(services::GapAdvertisementDataType::completeLocalName), infra::MakeConstByteRange(deviceName.Storage()));
+
     static infra::BoundedVector<uint8_t>::WithMaxSize<services::GapPeripheral::maxScanResponseDataSize> scanResponseData = {};
-
-    static const std::array<uint8_t, 11> localName = { sizeof(localName) - 1, infra::enum_cast(services::GapAdvertisementDataType::completeLocalName), 'b', 'l', 'e', '-', 'r', 'o', 'b', 'o', 't' };
-    static const std::array<uint8_t, 3> flags = { sizeof(flags) - 1, infra::enum_cast(services::GapAdvertisementDataType::flags), infra::enum_cast(services::GapPeripheral::AdvertisementFlags::brEdrNotSupported | services::GapPeripheral::AdvertisementFlags::leGeneralDiscoverableMode) };
-
-    advertisementData.assign(flags.begin(), flags.end());
-    advertisementData.insert(advertisementData.end(), localName.begin(), localName.end());
-    scanResponseData.assign(randomStaticAddress.begin(), randomStaticAddress.end());
+    AddAdStructure(scanResponseData, infra::enum_cast(services::GapAdvertisementDataType::publicTargetAddress), infra::MakeConstByteRange(randomStaticAddress));
 
     static RobotServiceGattServer robotServiceGattServer;
 
