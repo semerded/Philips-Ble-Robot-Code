@@ -194,7 +194,7 @@ int main()
     static infra::BoundedVector<uint8_t>::WithMaxSize<services::GapPeripheral::maxScanResponseDataSize> scanResponseData = {};
     AddAdStructure(scanResponseData, infra::enum_cast(services::GapAdvertisementDataType::publicTargetAddress), infra::MakeConstByteRange(randomStaticAddress));
 
-    static RobotServiceGattServer robotServiceGattServer;
+    static RobotServiceGattServerImpl RobotServiceGattServerImpl;
 
     static infra::Optional<hal::TracingGapPeripheralSt> gapPeripheralSt;
     static infra::Optional<services::GapPeripheralDecorator> gapPeripheralDecorator;
@@ -211,7 +211,7 @@ int main()
             gapPeripheralDecorator->SetScanResponseData(scanResponseData.range());
 
             tracingGattServerSt.Emplace(tracingSystemTransportLayer, tracer.tracer);
-            tracingGattServerSt->AddService(robotServiceGattServer.Service());
+            tracingGattServerSt->AddService(RobotServiceGattServerImpl.Service());
 
             bleUi.Emplace(*gapPeripheralSt, ui.ledRed, ui.ledGreen);
         },

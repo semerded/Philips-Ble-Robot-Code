@@ -6,9 +6,11 @@ target_include_directories(robot_interfaces INTERFACE
 )
 
 target_sources(robot_interfaces PRIVATE
-    PwmDriver.hpp
-    ShiftRegisterDriver.hpp
+    CarControl.hpp
     MotorShieldControllerDc.hpp
+    PwmDriver.hpp
+    RobotServiceGattServer.hpp
+    ShiftRegisterDriver.hpp
 )
 
 target_link_libraries(robot_interfaces INTERFACE

@@ -1,6 +1,6 @@
 #include "robot_services/CarControlToGattCharacteristic.hpp"
 #include "robot_services/test_doubles/CarControlMock.hpp"
-#include "services/ble/test_doubles/GattMock.hpp"
+#include "robot_services/test_doubles/RobotServiceGattServerMock.hpp"
 #include "gmock/gmock.h"
 #include <gtest/gtest.h>
 
@@ -9,23 +9,10 @@ class CarControlToGattCharacteristicTest
 {
     public:
     testing::StrictMock<CarControlMock> carControl;
-    testing::StrictMock<services::GattServerMock> robotService;
+    testing::StrictMock<RobotServiceGattServerMock> robotServiceGattServer;
 
-    CarControlToGattCharacteristic converter{ carControl, robotService};
+    CarControlToGattCharacteristic converter{ carControl, robotServiceGattServer};
 };
 
 TEST_F(CarControlToGattCharacteristicTest, initialization)
-{
-    
-}
-
-TEST_F(CarControlToGattCharacteristicTest, converter)
-{
-    
-}
-
-TEST_F(CarControlToGattCharacteristicTest, placeholder)
-{
-    
-}
-
+{}

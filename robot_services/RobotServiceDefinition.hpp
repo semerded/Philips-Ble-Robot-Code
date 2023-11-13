@@ -2,7 +2,7 @@
 #define ROBOT_SERVICE_ROBOT_SERVICE_DEFINITION_HPP
 
 #include "services/ble/Gatt.hpp"
-#include "services/ble/GattServer.hpp"
+#include "robot_interfaces/RobotServiceGattServer.hpp"
 #include "services/ble/GattServerCharacteristicImpl.hpp"
 
 class RobotServiceDefinition
@@ -28,17 +28,19 @@ private:
     static inline const services::AttAttribute::Uuid128 ackUuid{ { 0xc9, 0x26, 0x17, 0x65, 0x10, 0x76, 0x41, 0xac, 0x82, 0xd7, 0xa4, 0x54, 0xe8, 0x01, 0xbd, 0x9f } };
 };
 
-class RobotServiceGattServer
+class RobotServiceGattServerImpl
+    : public RobotServiceGattServer
 {
 public:
-    RobotServiceGattServer();
-    services::GattServerService& Service();
-    services::GattServerCharacteristicUpdate& SpeedLeft();
-    services::GattServerCharacteristicUpdate& SpeedRight();
-    services::GattServerCharacteristicUpdate& DirectionLeft();
-    services::GattServerCharacteristicUpdate& DirectionRight();
-    services::GattServerCharacteristicUpdate& Stop();
-    services::GattServerCharacteristicUpdate& Ack();
+    RobotServiceGattServerImpl();
+
+    services::GattServerService& Service() override;
+    services::GattServerCharacteristicUpdate& SpeedLeft() override;
+    services::GattServerCharacteristicUpdate& SpeedRight() override;
+    services::GattServerCharacteristicUpdate& DirectionLeft() override;
+    services::GattServerCharacteristicUpdate& DirectionRight() override;
+    services::GattServerCharacteristicUpdate& Stop() override;
+    services::GattServerCharacteristicUpdate& Ack() override;
 
 private:
     services::GattServerService service{ RobotServiceDefinition::ServiceUuid() };

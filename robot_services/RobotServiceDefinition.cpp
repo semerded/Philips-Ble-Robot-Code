@@ -41,7 +41,7 @@ const services::AttAttribute::Uuid128& RobotServiceDefinition::AckUuid()
     return ackUuid;
 }
 
-RobotServiceGattServer::RobotServiceGattServer()
+RobotServiceGattServerImpl::RobotServiceGattServerImpl()
     : speedLeft(service, RobotServiceDefinition::SpeedLeftUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
     , speedRight(service, RobotServiceDefinition::SpeedRightUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
     , directionLeft(service, RobotServiceDefinition::DirectionLeftUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
@@ -50,37 +50,37 @@ RobotServiceGattServer::RobotServiceGattServer()
     , ack(service, RobotServiceDefinition::AckUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::notify, permissionFlags)
 {}
 
-services::GattServerService& RobotServiceGattServer::Service()
+services::GattServerService& RobotServiceGattServerImpl::Service()
 {
     return service;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServer::SpeedLeft()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::SpeedLeft()
 {
     return speedLeft;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServer::SpeedRight()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::SpeedRight()
 {
     return speedRight;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServer::DirectionLeft()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::DirectionLeft()
 {
     return directionLeft;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServer::DirectionRight()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::DirectionRight()
 {
     return directionRight;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServer::Stop()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::Stop()
 {
     return stop;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServer::Ack()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::Ack()
 {
     return ack;
 }
