@@ -10,31 +10,31 @@ BasicCarControl::BasicCarControl(MotorShieldControllerDc& motorShield)
 BasicCarControl::~BasicCarControl()
 {}
 
-void BasicCarControl::speedMotorLeft(uint8_t percentage, infra::Function<void()> onDone)
+void BasicCarControl::SpeedMotorLeft(uint8_t percentage, infra::Function<void()> onDone)
 {
     motorShield.SetSpeed(Motor::three, percentage);
     onDone();
 }
 
-void BasicCarControl::speedMotorRight(uint8_t percentage, infra::Function<void()> onDone)
+void BasicCarControl::SpeedMotorRight(uint8_t percentage, infra::Function<void()> onDone)
 {
     motorShield.SetSpeed(Motor::four, percentage);
     onDone();
 }
 
-void BasicCarControl::directionMotorLeft(Direction direction, infra::Function<void()> onDone)
+void BasicCarControl::DirectionMotorLeft(Direction direction, infra::Function<void()> onDone)
 {
     motorShield.SetDirection(Motor::three, Direction::left);
     onDone();
 }
 
-void BasicCarControl::directionMotorRight(Direction direction, infra::Function<void()> onDone)
+void BasicCarControl::DirectionMotorRight(Direction direction, infra::Function<void()> onDone)
 {
     motorShield.SetDirection(Motor::four, Direction::right);
     onDone();
 }
 
-void BasicCarControl::stopMotors(infra::Function<void()> onDone)
+void BasicCarControl::StopMotors(infra::Function<void()> onDone)
 {
     motorShield.SetDirection(Motor::three, Direction::stop);
     motorShield.SetDirection(Motor::four, Direction::stop);

@@ -22,28 +22,28 @@ TEST_F(BasicCarControlTest, speedMotorLeft)
 {
     EXPECT_CALL(motorShield, SetSpeed(Motor::three, 50));
     infra::VerifyingFunctionMock<void()> done;
-    controller.speedMotorLeft(50, done);
+    controller.SpeedMotorLeft(50, done);
 }
 
 TEST_F(BasicCarControlTest, speedMotorRight)
 {
     EXPECT_CALL(motorShield, SetSpeed(Motor::four, 50));
     infra::VerifyingFunctionMock<void()> done;
-    controller.speedMotorRight(50, done);
+    controller.SpeedMotorRight(50, done);
 }
 
 TEST_F(BasicCarControlTest, directionMotorLeft)
 {
     EXPECT_CALL(motorShield, SetDirection(Motor::three, Direction::left));
     infra::VerifyingFunctionMock<void()> done;
-    controller.directionMotorLeft(Direction::left, done);
+    controller.DirectionMotorLeft(Direction::left, done);
 }
 
 TEST_F(BasicCarControlTest, directionMotorRight)
 {
     EXPECT_CALL(motorShield, SetDirection(Motor::four, Direction::right));
     infra::VerifyingFunctionMock<void()> done;
-    controller.directionMotorRight(Direction::right, done);
+    controller.DirectionMotorRight(Direction::right, done);
 }
 
 TEST_F(BasicCarControlTest, stopMotors)
@@ -55,5 +55,5 @@ TEST_F(BasicCarControlTest, stopMotors)
     EXPECT_CALL(motorShield, SetSpeed(Motor::four, 0));
 
     infra::VerifyingFunctionMock<void()> done;
-    controller.stopMotors(done);
+    controller.StopMotors(done);
 }

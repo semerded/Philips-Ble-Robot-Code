@@ -8,13 +8,13 @@
 class CarControl
 {
 public:
-    virtual void speedMotorLeft(uint8_t percentage, infra::Function<void()> onDone) = 0;
-    virtual void speedMotorRight(uint8_t percentage, infra::Function<void()> onDone) = 0;
+    virtual void SpeedMotorLeft(uint8_t percentage, infra::Function<void()> onDone) = 0;
+    virtual void SpeedMotorRight(uint8_t percentage, infra::Function<void()> onDone) = 0;
 
-    virtual void directionMotorLeft(Direction direction, infra::Function<void()> onDone) = 0;
-    virtual void directionMotorRight(Direction direction, infra::Function<void()> onDone) = 0;
+    virtual void DirectionMotorLeft(Direction direction, infra::Function<void()> onDone) = 0;
+    virtual void DirectionMotorRight(Direction direction, infra::Function<void()> onDone) = 0;
 
-    virtual void stopMotors(infra::Function<void()> onDone) = 0;
+    virtual void StopMotors(infra::Function<void()> onDone) = 0;
 };
 
 #endif

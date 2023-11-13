@@ -13,11 +13,11 @@ public:
     BasicCarControl(MotorShieldControllerDc& motorShield);
     ~BasicCarControl();
 
-    void speedMotorLeft(uint8_t percentage, infra::Function<void()> onDone) override;
-    void speedMotorRight(uint8_t percentage, infra::Function<void()> onDone) override;
-    void directionMotorLeft(Direction direction, infra::Function<void()> onDone) override;
-    void directionMotorRight(Direction direction, infra::Function<void()> onDone) override;
-    void stopMotors(infra::Function<void()> onDone) override;
+    void SpeedMotorLeft(uint8_t percentage, infra::Function<void()> onDone) override;
+    void SpeedMotorRight(uint8_t percentage, infra::Function<void()> onDone) override;
+    void DirectionMotorLeft(Direction direction, infra::Function<void()> onDone) override;
+    void DirectionMotorRight(Direction direction, infra::Function<void()> onDone) override;
+    void StopMotors(infra::Function<void()> onDone) override;
 
 private:
     MotorShieldControllerDc& motorShield;
