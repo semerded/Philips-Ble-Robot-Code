@@ -1,15 +1,16 @@
 #ifndef CAR_CONTROL_TO_GATT_CHARACTERISTIC_HPP
 #define CAR_CONTROL_TO_GATT_CHARACTERISTIC_HPP
 
-#include "robot_services/BasicCarControl.hpp"
-#include "robot_services/RobotServiceDefinition.hpp"
+#include "robot_interfaces/CarControl.hpp"
+#include "robot_interfaces/RobotServiceGattServer.hpp"
 
 class CarControlToGattCharacteristic
 {
-CarControlToGattCharacteristic(BasicCarControl& carControl, RobotServiceGattServer& robotServiceGattServer);
-// ~CarControlToGattCharacteristic();
+public:
+    CarControlToGattCharacteristic(CarControl& carControl, RobotServiceGattServer& robotServiceGattServer);
+    // ~CarControlToGattCharacteristic();
 private:
-    BasicCarControl& carControl;
+    CarControl& carControl;
     RobotServiceGattServer& robotServiceGattServer;
 };
 
