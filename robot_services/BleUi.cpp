@@ -3,13 +3,11 @@
 #include "services/ble/Gap.hpp"
 
 BleUi::BleUi(services::GapPeripheral& subject, hal::GpioPin& led)
-: services::GapPeripheralObserver(subject)
-, led(led)
+    : services::GapPeripheralObserver(subject)
+    , led(led)
 {
-    
 }
 
 void BleUi::StateChanged(services::GapState state)
 {
-
 }

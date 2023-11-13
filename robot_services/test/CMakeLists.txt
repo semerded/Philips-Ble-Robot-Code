@@ -12,4 +12,5 @@ target_link_libraries(robot_services_test PUBLIC
     gmock_main
     robot_services
     hal.interfaces_test_doubles
+    services.ble_test_doubles
 )
