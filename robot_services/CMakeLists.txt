@@ -14,6 +14,8 @@ target_sources(robot_services PRIVATE
     MotorShieldControllerDcImpl.hpp
     BasicCarControl.cpp
     BasicCarControl.hpp
+    BleUi.hpp
+    BleUi.cpp
 )
 
 target_link_libraries(robot_services PUBLIC

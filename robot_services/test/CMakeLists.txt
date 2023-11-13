@@ -5,6 +5,7 @@ target_sources(robot_services_test PRIVATE
     TestShiftRegisterDriver.cpp
     TestMotorShieldControllerDc.cpp
     TestBasicCarControl.cpp
+    TestBleUi.cpp
 )
 
 target_link_libraries(robot_services_test PUBLIC
