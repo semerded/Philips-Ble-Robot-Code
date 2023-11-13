@@ -2,11 +2,22 @@
 #include "hal/interfaces/Gpio.hpp"
 #include "services/ble/Gap.hpp"
 
-BleUi::BleUi(services::GapPeripheral& subject, hal::GpioPin& led)
+BleUi::BleUi(services::GapPeripheral& subject, hal::GpioPin& ledStandby, hal::GpioPin& ledBleInteraction)
     : services::GapPeripheralObserver(subject)
-    , led(led)
+    , ledStandby(ledStandby)
+    , ledBleInteraction(ledBleInteraction)
 {
+    ledStandby.Set(true);
+    ledBleInteraction.Set(false);
 }
+
+BleUi::~BleUi()
+{
+    ledStandby.Set(false);
+    ledBleInteraction.Set(false);
+}
+
+
 
 void BleUi::StateChanged(services::GapState state)
 {

@@ -6,6 +6,7 @@ target_sources(robot_services_test PRIVATE
     TestMotorShieldControllerDc.cpp
     TestBasicCarControl.cpp
     TestBleUi.cpp
+    
 )
 
 target_link_libraries(robot_services_test PUBLIC
@@ -13,4 +14,6 @@ target_link_libraries(robot_services_test PUBLIC
     robot_services
     hal.interfaces_test_doubles
     services.ble_test_doubles
+    infra.timer_test_helper
+
 )
