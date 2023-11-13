@@ -11,7 +11,7 @@ class BleUi
 {
 public:
     BleUi(services::GapPeripheral& subject, hal::GpioPin& ledStandby, hal::GpioPin& ledBleInteraction);
-    ~BleUi();
+    ~BleUi() override;
     void StateChanged(services::GapState state) override;
 
 private:
