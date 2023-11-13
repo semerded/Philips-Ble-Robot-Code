@@ -1,5 +1,6 @@
 #include "app_conf.h"
 #include "generated/Version.h"
+#include "hal/interfaces/Gpio.hpp"
 #include "hal/interfaces/MacAddress.hpp"
 #include "hal_st/instantiations/NucleoTracerInfrastructure.hpp"
 #include "hal_st/instantiations/NucleoUi.hpp"
@@ -9,13 +10,17 @@
 #include "hal_st/middlewares/ble_middleware/TracingSystemTransportLayer.hpp"
 #include "hal_st/stm32fxxx/DefaultClockNucleoWB55RG.hpp"
 #include "hal_st/stm32fxxx/UniqueDeviceId.hpp"
+#include "infra/timer/Timer.hpp"
 #include "infra/util/ByteRange.hpp"
+#include "infra/util/Observer.hpp"
 #include "robot_services/RobotServiceDefinition.hpp"
 #include "services/ble/BondStorageSynchronizer.hpp"
 #include "services/util/DebugLed.hpp"
 #include <array>
+#include <chrono>
 #include <sys/_stdint.h>
 #include <sys/types.h>
+#include "ble_example/Ble
 
 extern "C" void IPCC_C1_RX_IRQHandler(void)
 {
@@ -133,6 +138,9 @@ int main()
     static main_::StmEventInfrastructure eventInfrastructure;
     static main_::Nucleo64WBUi ui;
     static services::DebugLed debugLed(ui.ledBlue);
+    static hal::OutputPin advertiseLed(ui.ledGreen);
+    static bool blinkOn = false;
+    
 
     static main_::NucleoWb55rgTracerInfrastructure tracer;
 
@@ -178,22 +186,46 @@ int main()
             tracingGattServerSt->AddService(robotServiceGattServer.Service());
         },
         tracer.tracer);
+    services::GapState stateConnected = services::GapState::connected;
+    tracer.tracer.Trace() << "hello";
+    tracer.tracer.Trace() << stateConnected;
 
     ui.buttonOne.Config(hal::PinConfigType::input);
     ui.buttonOne.EnableInterrupt([]()
         {
             tracer.tracer.Trace() << "BU1: pressed";
+            tracer.tracer.Trace() << "started advertising";
+
+            static infra::TimerRepeating timer(std::chrono::milliseconds(100), []()
+                {
+                    if (blinkOn)
+                    {
+                        advertiseLed.Set(false);
+                        blinkOn = false;
+                    }
+                    else
+                    {
+                        advertiseLed.Set(true);
+                        blinkOn = true;
+                    }
+                });
             gapPeripheralDecorator->Advertise(services::GapAdvertisementType::advInd, 0x200u);
         },
         hal::InterruptTrigger::fallingEdge);
 
+
     ui.buttonTwo.Config(hal::PinConfigType::input);
     ui.buttonTwo.EnableInterrupt([]()
         {
-            tracer.tracer.Trace() << "BU2: pressed";
+            gapPeripheralDecorator->Standby();
+            tracer.tracer.Trace() << "BU2: pressed (does nothing)";
+            tracer.tracer.Trace() << "stopped advertising";
+
         },
         hal::InterruptTrigger::fallingEdge);
 
     eventInfrastructure.Run();
     __builtin_unreachable();
+
+
 }
