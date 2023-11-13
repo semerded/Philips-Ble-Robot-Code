@@ -15,10 +15,8 @@ public:
 
     void speedMotorLeft(uint8_t percentage, infra::Function<void()> onDone) override;
     void speedMotorRight(uint8_t percentage, infra::Function<void()> onDone) override;
-
     void directionMotorLeft(Direction direction, infra::Function<void()> onDone) override;
     void directionMotorRight(Direction direction, infra::Function<void()> onDone) override;
-
     void stopMotors(infra::Function<void()> onDone) override;
 
 private:
