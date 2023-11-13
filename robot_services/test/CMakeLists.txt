@@ -6,6 +6,7 @@ target_sources(robot_services_test PRIVATE
     TestMotorShieldControllerDc.cpp
     TestBasicCarControl.cpp
     TestBleUi.cpp
+    TestCarControlToGattCharacteristic.cpp
     
 )
 
