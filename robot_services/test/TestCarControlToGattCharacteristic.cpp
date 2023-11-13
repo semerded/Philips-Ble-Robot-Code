@@ -11,7 +11,7 @@ class CarControlToGattCharacteristicTest
     testing::StrictMock<CarControlMock> carControl;
     testing::StrictMock<RobotServiceGattServerMock> robotServiceGattServer;
 
-    CarControlToGattCharacteristic converter{ carControl, robotServiceGattServer};
+    CarControlToGattCharacteristic carControlToGattCharacteristic{ carControl, robotServiceGattServer};
 };
 
 TEST_F(CarControlToGattCharacteristicTest, initialization)
