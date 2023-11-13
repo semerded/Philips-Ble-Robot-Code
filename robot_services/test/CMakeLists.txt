@@ -7,11 +7,12 @@ target_sources(robot_services_test PRIVATE
     TestBasicCarControl.cpp
     TestBleUi.cpp
     TestCarControlToGattCharacteristic.cpp
-    
+
 )
 
 target_link_libraries(robot_services_test PUBLIC
     gmock_main
+    infra.util_test_helper
     robot_services
     hal.interfaces_test_doubles
     services.ble_test_doubles

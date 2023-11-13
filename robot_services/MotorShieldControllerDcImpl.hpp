@@ -36,7 +36,7 @@ private:
 
     ShiftRegisterDriver& shiftRegister;
 
-    std::bitset<8> shiftRegisterByte;
+    std::bitset<8> shiftRegisterByte{0};
     infra::BoundedVector<MotorEntry>::WithMaxSize<4> motorMapping;
 };
 

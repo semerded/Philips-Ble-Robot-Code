@@ -1,4 +1,5 @@
 #include "robot_services/BasicCarControl.hpp"
+#include "infra/util/EnumCast.hpp"
 #include "infra/util/Function.hpp"
 #include "robot_interfaces/MotorShieldControllerDc.hpp"
 
@@ -24,13 +25,13 @@ void BasicCarControl::SpeedMotorRight(uint8_t percentage, infra::Function<void()
 
 void BasicCarControl::DirectionMotorLeft(Direction direction, infra::Function<void()> onDone)
 {
-    motorShield.SetDirection(Motor::three, Direction::left);
+    motorShield.SetDirection(Motor::three, direction);
     onDone();
 }
 
 void BasicCarControl::DirectionMotorRight(Direction direction, infra::Function<void()> onDone)
 {
-    motorShield.SetDirection(Motor::four, Direction::right);
+    motorShield.SetDirection(Motor::four, direction);
     onDone();
 }
 

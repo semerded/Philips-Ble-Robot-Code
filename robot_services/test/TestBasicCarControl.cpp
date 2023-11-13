@@ -37,13 +37,21 @@ TEST_F(BasicCarControlTest, directionMotorLeft)
     EXPECT_CALL(motorShield, SetDirection(Motor::three, Direction::left));
     infra::VerifyingFunctionMock<void()> done;
     controller.DirectionMotorLeft(Direction::left, done);
+
+    EXPECT_CALL(motorShield, SetDirection(Motor::three, Direction::right));
+    infra::VerifyingFunctionMock<void()> done2;
+    controller.DirectionMotorLeft(Direction::right, done2);
 }
 
 TEST_F(BasicCarControlTest, directionMotorRight)
 {
-    EXPECT_CALL(motorShield, SetDirection(Motor::four, Direction::right));
+    EXPECT_CALL(motorShield, SetDirection(Motor::four, Direction::left));
     infra::VerifyingFunctionMock<void()> done;
-    controller.DirectionMotorRight(Direction::right, done);
+    controller.DirectionMotorRight(Direction::left, done);
+
+    EXPECT_CALL(motorShield, SetDirection(Motor::four, Direction::right));
+    infra::VerifyingFunctionMock<void()> done2;
+    controller.DirectionMotorRight(Direction::right, done2);
 }
 
 TEST_F(BasicCarControlTest, stopMotors)

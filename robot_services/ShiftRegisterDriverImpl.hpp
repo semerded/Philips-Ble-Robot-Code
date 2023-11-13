@@ -19,7 +19,6 @@ public:
 
 private:
     void SendBitOnClock(bool bit);
-
     void ShiftOnLatch(infra::Function<void()> onShift);
 
 private:
