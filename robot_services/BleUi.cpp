@@ -29,5 +29,8 @@ void BleUi::StateChanged(services::GapState state)
             ledBleInteraction.Set(ledState);
             ledState = !ledState;
         });
+    } else if (state == services::GapState::connected) {
+        ledStandby.Set(false);
+        ledBleInteraction.Set(true);
     }
 }

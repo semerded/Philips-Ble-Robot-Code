@@ -59,3 +59,14 @@ TEST_F(BleUiTest, go_to_state_connected)
         observer.StateChanged(services::GapState::connected);
     });
 }
+
+
+TEST_F(BleUiTest, go_to_state_standby)
+{
+    EXPECT_CALL(ledRed, Set(true));
+    EXPECT_CALL(ledGreen, Set(false));
+
+    subject.NotifyObservers([](auto& observer){
+        observer.StateChanged(services::GapState::standby);
+    });
+}
