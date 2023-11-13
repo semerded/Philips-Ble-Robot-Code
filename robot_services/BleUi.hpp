@@ -2,6 +2,7 @@
 #define BLE_UI_HPP
 
 #include "hal/interfaces/Gpio.hpp"
+#include "infra/timer/Timer.hpp"
 #include "services/ble/Gap.hpp"
 
 class BleUi
@@ -15,6 +16,7 @@ public:
 private:
     hal::GpioPin& ledStandby;
     hal::GpioPin& ledBleInteraction;
+    infra::TimerRepeating bleInteractionTimer;
 };
 
 #endif

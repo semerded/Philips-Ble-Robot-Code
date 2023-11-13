@@ -33,7 +33,7 @@ public:
 TEST_F(BleUiTest, initialization_in_standby)
 {}
 
-TEST_F(BleUiTest, stand_by_to_advertising)
+TEST_F(BleUiTest, go_to_state_advertising)
 {
     EXPECT_CALL(ledRed, Set(false));
 
@@ -48,4 +48,14 @@ TEST_F(BleUiTest, stand_by_to_advertising)
     }));
 
     ForwardTime(std::chrono::milliseconds(200));
+}
+
+TEST_F(BleUiTest, go_to_state_connected)
+{
+    EXPECT_CALL(ledRed, Set(false));
+    EXPECT_CALL(ledGreen, Set(true));
+
+    subject.NotifyObservers([](auto& observer){
+        observer.StateChanged(services::GapState::connected);
+    });
 }
