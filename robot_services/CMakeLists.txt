@@ -18,6 +18,8 @@ target_sources(robot_services PRIVATE
     BleUi.cpp
     CarControlToGattCharacteristic.cpp
     CarControlToGattCharacteristic.hpp
+    TracingBasicCarControl.cpp
+    TracingBasicCarControl.hpp
 )
 
 target_link_libraries(robot_services PUBLIC

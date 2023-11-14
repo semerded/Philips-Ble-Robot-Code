@@ -12,12 +12,18 @@
 #include "hal_st/stm32fxxx/UniqueDeviceId.hpp"
 #include "infra/timer/Timer.hpp"
 #include "infra/util/ByteRange.hpp"
+#include "infra/util/Function.hpp"
 #include "infra/util/Optional.hpp"
 #include "robot/PwmDriverImpl.hpp"
+#include "robot_interfaces/MotorShieldControllerDc.hpp"
 #include "robot_services/BleUi.hpp"
+#include "robot_services/CarControlToGattCharacteristic.hpp"
+#include "robot_services/MotorShieldControllerDcImpl.hpp"
 #include "robot_services/RobotServiceDefinition.hpp"
 #include "robot_services/ShiftRegisterDriverImpl.hpp"
+#include "robot_services/TracingBasicCarControl.hpp"
 #include "services/ble/BondStorageSynchronizer.hpp"
+#include "services/tracer/GlobalTracer.hpp"
 #include "services/util/DebugLed.hpp"
 #include <array>
 #include <chrono>
@@ -127,15 +133,25 @@ public:
     }
 };
 
+class PwmDriverStub
+    : public PwmDriver
+{
+public:
+    void SetDutyCycle(EMIL_MAYBE_UNUSED uint8_t dutyCycle) override
+    {}
+};
+
 unsigned int hse_value = 32000000;
 
 int main()
 {
     HAL_Init();
 
-    // Configure your clock here
     ConfigureDefaultClockNucleoWB55RG();
     ConfigureSystemAndPeripherals();
+
+    __HAL_RCC_TIM1_CLK_ENABLE();
+    __HAL_RCC_TIM2_CLK_ENABLE();
 
     static main_::StmEventInfrastructure eventInfrastructure;
     static main_::Nucleo64WBUi ui;
@@ -143,6 +159,7 @@ int main()
     static bool blinkOn = false;
 
     static main_::NucleoWb55rgTracerInfrastructure tracer;
+    services::SetGlobalTracerInstance(tracer.tracer);
 
     static auto randomStaticAddress = CreateUniqueMacAddress();
     PrintModuleInfoBanner(tracer.tracer, randomStaticAddress);
@@ -151,25 +168,19 @@ int main()
     static hal::GpioPinStm clock(hal::Port::C, 10);
     static hal::GpioPinStm serialIn(hal::Port::C, 12);
     static hal::GpioPinStm enable(hal::Port::C, 13);
-
     static ShiftRegisterDriverImpl shiftRegisterDriver(enable, latch, clock, serialIn);
-
-    shiftRegisterDriver.ShiftByte(0b11'00'00'00);
-    shiftRegisterDriver.EnableOutput();
-
-    __HAL_RCC_TIM1_CLK_ENABLE();
-    __HAL_RCC_TIM2_CLK_ENABLE();
 
     static hal::GpioPinStm pwmMotorFourPin(hal::Port::A, 8, hal::Drive::PushPull, hal::Speed::High, hal::WeakPull::Up);
     static hal::PeripheralPinStm pwmMotorFour(pwmMotorFourPin, hal::PinConfigTypeStm::timerChannel1, 1);
     static hal::GpioPinStm pwmMotorThreePin(hal::Port::A, 15, hal::Drive::PushPull, hal::Speed::High, hal::WeakPull::Up);
     static hal::PeripheralPinStm pwmMotorThree(pwmMotorThreePin, hal::PinConfigTypeStm::timerChannel1, 2);
+    static PwmDriverStub PwmDriver1;
+    static PwmDriverStub PwmDriver2;
+    static PwmDriverImpl PwmDriver3(TIM1);
+    static PwmDriverImpl PwmDriver4(TIM2);
 
-    static PwmDriverImpl PwmDriver1(TIM1);
-    static PwmDriverImpl PwmDriver2(TIM2);
-
-    PwmDriver1.SetDutyCycle(0);
-    PwmDriver2.SetDutyCycle(0);
+    static MotorShieldControllerDcImpl motorShieldControllerDc(shiftRegisterDriver, PwmDriver1, PwmDriver2, PwmDriver3, PwmDriver4);
+    static TracingBasicCarControl carControl(motorShieldControllerDc, tracer.tracer);
 
     tracer.tracer.Trace() << "motors ready for use";
 
@@ -199,8 +210,8 @@ int main()
     static infra::Optional<hal::TracingGapPeripheralSt> gapPeripheralSt;
     static infra::Optional<services::GapPeripheralDecorator> gapPeripheralDecorator;
     static infra::Optional<hal::TracingGattServerSt> tracingGattServerSt;
-
     static infra::Optional<BleUi> bleUi;
+    static infra::Optional<CarControlToGattCharacteristic> carControlToGattCharacteristic;
 
     static hal::TracingSystemTransportLayer tracingSystemTransportLayer(
         flashStorageAccess, [](uint32_t* bondStorageAddress)
@@ -214,6 +225,7 @@ int main()
             tracingGattServerSt->AddService(RobotServiceGattServerImpl.Service());
 
             bleUi.Emplace(*gapPeripheralSt, ui.ledRed, ui.ledGreen);
+            carControlToGattCharacteristic.Emplace(carControl, RobotServiceGattServerImpl);
         },
         tracer.tracer);
 
@@ -231,8 +243,46 @@ int main()
     ui.buttonTwo.EnableInterrupt([]()
         {
             gapPeripheralDecorator->Standby();
-            tracer.tracer.Trace() << "BU2: pressed (does nothing)";
             tracer.tracer.Trace() << "stopped advertising";
+        },
+        hal::InterruptTrigger::fallingEdge);
+
+    ui.buttonThree.Config(hal::PinConfigType::input);
+    ui.buttonThree.EnableInterrupt([]()
+        {
+            tracer.tracer.Trace() << "BU3: test";
+            static auto stepIterator = 0;
+            static infra::TimerRepeating testTimer;
+
+            testTimer.Start(std::chrono::seconds(1), []()
+                {
+                    if (stepIterator == 0)
+                        carControl.SpeedMotorLeft(50, infra::emptyFunction);
+                    else if (stepIterator == 1)
+                        carControl.SpeedMotorRight(50, infra::emptyFunction);
+                    else if (stepIterator == 2)
+                        carControl.DirectionMotorLeft(Direction::left, infra::emptyFunction);
+                    else if (stepIterator == 3)
+                        carControl.DirectionMotorLeft(Direction::right, infra::emptyFunction);
+                    else if (stepIterator == 4)
+                        carControl.DirectionMotorLeft(Direction::stop, infra::emptyFunction);
+                    else if (stepIterator == 5)
+                        carControl.DirectionMotorRight(Direction::left, infra::emptyFunction);
+                    else if (stepIterator == 6)
+                        carControl.DirectionMotorRight(Direction::right, infra::emptyFunction);
+                    else if (stepIterator == 7)
+                        carControl.DirectionMotorRight(Direction::stop, infra::emptyFunction);
+                    else if (stepIterator == 8)
+                        carControl.StopMotors(infra::emptyFunction);
+                    else
+                    {
+                        testTimer.Cancel();
+                        stepIterator = 0;
+                        return;
+                    }
+
+                    ++stepIterator;
+                });
         },
         hal::InterruptTrigger::fallingEdge);
 

@@ -33,7 +33,6 @@ CarControlToGattCharacteristic::CarControlToGattCharacteristic(CarControl& carCo
               this->carControl.StopMotors(sendAck);
           })
     , gattSubjectAck(robotServiceGattServer.Ack())
-
 {}
 
 CarControlToGattCharacteristic::GattServerExclusiveReceiveCharacteristic::GattServerExclusiveReceiveCharacteristic(services::GattServerCharacteristicUpdate& subject, infra::Function<void(uint8_t data)> onDataReceived)
@@ -52,6 +51,6 @@ CarControlToGattCharacteristic::GattServerCharacteristicAck::GattServerCharacter
 
 void CarControlToGattCharacteristic::GattServerCharacteristicAck::SendAck()
 {
-    static const uint8_t ok = 0;
+    static constexpr uint8_t ok = 0;
     subject.Update(infra::MakeRangeFromSingleObject(ok), infra::emptyFunction);
 }
