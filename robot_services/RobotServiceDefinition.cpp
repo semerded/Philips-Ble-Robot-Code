@@ -3,7 +3,7 @@
 namespace
 {
     constexpr auto maxPacketSize = 23 - 3; // Optimization as found in ST document AN5289 Rev 7 (Section 7.6.9 How to maximize data throughput).
-    constexpr auto permissionFlags = services::GattServerCharacteristic::PermissionFlags::encryptedWrite;
+    constexpr auto permissionFlags = services::GattServerCharacteristic::PermissionFlags::none;
 }
 
 const services::AttAttribute::Uuid128& RobotServiceDefinition::ServiceUuid()
