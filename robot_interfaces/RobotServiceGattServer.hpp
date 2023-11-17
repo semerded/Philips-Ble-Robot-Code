@@ -7,11 +7,7 @@ class RobotServiceGattServer
 {
 public:
     virtual services::GattServerService& Service() = 0;
-    virtual services::GattServerCharacteristicUpdate& SpeedLeft() = 0;
-    virtual services::GattServerCharacteristicUpdate& SpeedRight() = 0;
-    virtual services::GattServerCharacteristicUpdate& DirectionLeft() = 0;
-    virtual services::GattServerCharacteristicUpdate& DirectionRight() = 0;
-    virtual services::GattServerCharacteristicUpdate& Stop() = 0;
+    virtual services::GattServerCharacteristicUpdate& Control() = 0;
     virtual services::GattServerCharacteristicUpdate& Ack() = 0;
 };
 

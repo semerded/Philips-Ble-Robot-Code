@@ -9,11 +9,7 @@ class RobotServiceGattServerMock
 {
 public:
     MOCK_METHOD(services::GattServerService&, Service, ());
-    MOCK_METHOD(services::GattServerCharacteristicUpdate&, SpeedLeft, ());
-    MOCK_METHOD(services::GattServerCharacteristicUpdate&, SpeedRight, ());
-    MOCK_METHOD(services::GattServerCharacteristicUpdate&, DirectionLeft, ());
-    MOCK_METHOD(services::GattServerCharacteristicUpdate&, DirectionRight, ());
-    MOCK_METHOD(services::GattServerCharacteristicUpdate&, Stop, ());
+    MOCK_METHOD(services::GattServerCharacteristicUpdate&, Control, ());
     MOCK_METHOD(services::GattServerCharacteristicUpdate&, Ack, ());
 };
 

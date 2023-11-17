@@ -1,29 +1,40 @@
 #ifndef CAR_CONTROL_TO_GATT_CHARACTERISTIC_HPP
 #define CAR_CONTROL_TO_GATT_CHARACTERISTIC_HPP
 
+#include "infra/util/ByteRange.hpp"
 #include "infra/util/Function.hpp"
+#include "infra/util/Optional.hpp"
 #include "robot_interfaces/CarControl.hpp"
+#include "robot_interfaces/MotorShieldControllerDc.hpp"
 #include "robot_interfaces/RobotServiceGattServer.hpp"
 #include "services/ble/GattServer.hpp"
 #include <cstdint>
 #include <sys/types.h>
 
 class CarControlToGattCharacteristic
+    : public services::GattServerCharacteristicObserver
 {
 public:
     CarControlToGattCharacteristic(CarControl& carControl, RobotServiceGattServer& robotServiceGattServer);
 
+    void DataReceived(infra::ConstByteRange data) override;
+
 private:
-    class GattServerExclusiveReceiveCharacteristic
-        : public services::GattServerCharacteristicObserver
+    class ControlDataParser
     {
     public:
-        GattServerExclusiveReceiveCharacteristic(services::GattServerCharacteristicUpdate& subject, infra::Function<void(uint8_t data)> onDataReceived);
+        ControlDataParser(infra::ConstByteRange data);
 
-        void DataReceived(infra::ConstByteRange data) override;
+        uint8_t& SpeedLeft();
+        uint8_t& SpeedRight();
+        Direction& DirectionLeft();
+        Direction& DirectionRight();
 
     private:
-        infra::Function<void(uint8_t data)> onDataReceived;
+        Direction directionLeft;
+        uint8_t speedLeft;
+        Direction directionRight;
+        uint8_t speedRight;
     };
 
     class GattServerCharacteristicAck
@@ -42,11 +53,7 @@ private:
     RobotServiceGattServer& robotServiceGattServer;
     infra::Function<void()> sendAck;
 
-    GattServerExclusiveReceiveCharacteristic gattObserverSpeedLeft;
-    GattServerExclusiveReceiveCharacteristic gattObserverSpeedRight;
-    GattServerExclusiveReceiveCharacteristic gattObserverDirectionLeft;
-    GattServerExclusiveReceiveCharacteristic gattObserverDirectionRight;
-    GattServerExclusiveReceiveCharacteristic gattObserverStop;
+    infra::Optional<ControlDataParser> controlDataParser;
     GattServerCharacteristicAck gattSubjectAck;
 };
 

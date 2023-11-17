@@ -11,29 +11,9 @@ const services::AttAttribute::Uuid128& RobotServiceDefinition::ServiceUuid()
     return serviceUuid;
 }
 
-const services::AttAttribute::Uuid128& RobotServiceDefinition::SpeedLeftUuid()
+const services::AttAttribute::Uuid128& RobotServiceDefinition::ControlUuid()
 {
-    return speedLeftUuid;
-}
-
-const services::AttAttribute::Uuid128& RobotServiceDefinition::SpeedRightUuid()
-{
-    return speedRightUuid;
-}
-
-const services::AttAttribute::Uuid128& RobotServiceDefinition::DirectionLeftUuid()
-{
-    return directionLeftUuid;
-}
-
-const services::AttAttribute::Uuid128& RobotServiceDefinition::DirectionRightUuid()
-{
-    return directionRightUuid;
-}
-
-const services::AttAttribute::Uuid128& RobotServiceDefinition::StopUuid()
-{
-    return stopUuid;
+    return controlUuid;
 }
 
 const services::AttAttribute::Uuid128& RobotServiceDefinition::AckUuid()
@@ -42,11 +22,7 @@ const services::AttAttribute::Uuid128& RobotServiceDefinition::AckUuid()
 }
 
 RobotServiceGattServerImpl::RobotServiceGattServerImpl()
-    : speedLeft(service, RobotServiceDefinition::SpeedLeftUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
-    , speedRight(service, RobotServiceDefinition::SpeedRightUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
-    , directionLeft(service, RobotServiceDefinition::DirectionLeftUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
-    , directionRight(service, RobotServiceDefinition::DirectionRightUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
-    , stop(service, RobotServiceDefinition::StopUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
+    : control(service, RobotServiceDefinition::ControlUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::writeWithoutResponse, permissionFlags)
     , ack(service, RobotServiceDefinition::AckUuid(), maxPacketSize, services::GattCharacteristic::PropertyFlags::notify, permissionFlags)
 {}
 
@@ -55,29 +31,9 @@ services::GattServerService& RobotServiceGattServerImpl::Service()
     return service;
 }
 
-services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::SpeedLeft()
+services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::Control()
 {
-    return speedLeft;
-}
-
-services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::SpeedRight()
-{
-    return speedRight;
-}
-
-services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::DirectionLeft()
-{
-    return directionLeft;
-}
-
-services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::DirectionRight()
-{
-    return directionRight;
-}
-
-services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::Stop()
-{
-    return stop;
+    return control;
 }
 
 services::GattServerCharacteristicUpdate& RobotServiceGattServerImpl::Ack()
