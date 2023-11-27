@@ -1,9 +1,19 @@
-## Snuffelstage bij Philips Eindhoven van 6nov - 17nov 2023
+part of the Philips connectivity robot
 
-Behandelde onderdelen:
-- maken van een remote Git repository
-- werken met submodules
-- werken met C++ en CMake
-- robot aansturen
-- besturen met BLE
-- app voor robot gebruiken/ontwikkelen
+# a project made for my internship at Philips (6-17nov)
+
+## build with philips opensource libraries
+
+the robot is writen in c++ with the embeded infralib and hal-st libraries from Philips 
+- link
+- link
+
+the robot can connect with Bluetooth and can be controlled with the deticated app <link>.
+
+the project is opensource and free to update
+
+components on robot
+- motorshield for 4 motors
+- 2 DC motors
+- stm32 55wb microcontroller
+- bitshiftregister
